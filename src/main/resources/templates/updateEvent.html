@@ -1,57 +1,85 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Update Activity</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
 </head>
 <body>
 <th:block th:include="/navbar"></th:block>
-<h3>Add a new Event</h3>
-<form th:action="@{/updateEvent}"
-      th:object="${activityForm}" method="POST">
-    <div class="form-group">
-        <label th:for="${activityForm}">Nom</label>
-        <input class="form-control" type="text" th:placeholder="${activityForm.getName()}" th:field="*{name}" required
-               minlength="5" maxlength="30"/></div>
-    <div class="form-group">
-        <label th:for="${activityForm}">Description</label>
-        <textarea class="form-control" type="text" th:placeholder="${activityForm.getDescription()}" th:field="*{description}" required
-                  rows="10" cols="30"/>Few words about the activity</textarea>
+<div class="pure-g">
+    <div class="pure-u-1-6"></div>
+    <div class="pure-u-2-3">
+        <form th:action="@{/updateEvent}"
+              th:object="${activityForm}" method="POST" class="pure-form pure-form-stacked">
+            <fieldset>
+                <legend>Update your Activity</legend>
+                <div class="pure-g">
+                    <div class="pure-u-1-2">
+                        <label th:for="${sportsManForm}">Name</label>
+                        <input class="pure-u-23-24" type="text" th:placeholder="${activityForm.getName()}" th:field="*{name}"/>
+                        <div>
+                            <span class="text-danger" th:errors="*{name}"> </span>
+                        </div>
+                    </div>
+                    <div class="pure-u-1-2">
+                        <label th:for="${sportsManForm}">When?</label>
+                        <input class="pure-u-24-24" type="date" th:placeholder="${activityForm.getPlannedTo()}" th:field="*{plannedTo}"/>
+                        <div>
+                            <span class="text-danger" th:errors="*{plannedTo}"> </span>
+                        </div>
+                    </div>
+                    <div class="pure-u-1-1">
+                        <label th:for="${sportsManForm}">What do you plan?</label>
+                        <textarea th:field="*{description}" class="pure-u-24-24"
+                                  rows="6"/></textarea>
+                        <div>
+                            <span class="text-danger" th:errors="*{description}"> </span>
+                        </div>
+                    </div>
+                    <div class="pure-u-1-4">
+                        <label>Activity</label>
+                        <select class="pure-u-23-24" th:field="*{activity}">
+                            <option th:each="type : ${allKinds}"
+                                    th:value="${type.getId()}"
+                                    th:utext="${type.getName()}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="pure-u-1-4">
+                        <label>Minimum Level</label>
+                        <select class="pure-u-23-24" th:field="*{minimumLevel}">
+                            <option th:each="level : ${allLevels}"
+                                    th:value="${level.getId()}"
+                                    th:utext="${level.getName()}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="pure-u-1-4">
+                        <label>Maximum Level</label>
+                        <select class="pure-u-23-24">
+                            <option th:each="level : ${allLevels}"
+                                    th:value="${level.getId()}"
+                                    th:utext="${level.getName()}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="pure-u-1-4">
+                        <label th:for="${sportsManForm}">Duration</label>
+                        <input class="pure-u-24-24" type="number" th:placeholder="${activityForm.getDuration()}" th:field="*{duration}">
+                        <div>
+                            <span class="text-danger" th:errors="*{duration}"> </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" th:field="*{id}"/>
+                    </div>
+                    <div class="pure-u-1-1">
+                        <button class="pure-button pure-button" type="submit">Save</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
     </div>
-    <div class="form-group">
-        <label th:for="${activityForm}">Planned For</label>
-        <!--<input class="form-control" type="date" th:field="*{plannedTo}" required>-->
-        <input class="form-control" type="date" th:placeholder="${activityForm.getPlannedTo()}" th:field="*{plannedTo}" required>
-    </div>
-    <!--<div class="form-group">
-        <label th:for="${activityForm}">Planned For</label>
-        <input class="form-control" type="time" th:field="*{hour}" required>
-    </div>-->
-    <div class="form-group">
-        <label>
-            <select class="form-control" th:field="*{activity}">
-                <option value="" disabled selected> Choose a kind of Activity</option>
-                <option th:each="type : ${allKinds}"
-                        th:value="${type.getId()}"
-                        th:utext="${type.getName()}">
-                </option>
-            </select>
-        </label>
-    </div>
-    <div class="form-group">
-        <label>
-            <select class="form-control" th:field="*{minimumLevel}">
-                <option value="" disabled selected> Choose a kind of Activity</option>
-                <option th:each="level : ${allLevels}"
-                        th:value="${level.getId()}"
-                        th:utext="${level.getName()}">
-                </option>
-            </select>
-        </label>
-    </div>
-    <div class="form-group">
-        <label th:for="${activityForm}">Duration</label>
-        <input class="form-control" th:placeholder="${activityForm.getDuration()}" type="number" th:field="*{duration}" required/></div>
-    <input type="hidden" th:field="*{id}" required/>
-    <button class="btn btn-secondary" type="submit">Save</button>
-</form>
+    <div class="pure-u-1-6"></div>
+</div>
 </body>

@@ -102,7 +102,7 @@ public class EventController {
     }
 
     @RequestMapping(value = "/updateEvent", method = RequestMethod.POST)
-    public String updateEvent(@ModelAttribute("ActivityForm") ActivityForm activityForm) {
+    public String updateEvent(@ModelAttribute("activityForm") ActivityForm activityForm) {
         Activity activity = this.activityRepository.findSpecific(activityForm.getId());
         activity.update(activityForm);
         this.activityRepository.save(activity);
