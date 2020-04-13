@@ -121,6 +121,7 @@ public class SportsManForm {
         this.description = sportsMan.getDescription();
         this.mail = sportsMan.getEmail();
         this.weight = sportsMan.getWeight();
+        this.dateofBirth = sportsMan.getDateOfBirth().toString();
     }
 
     ;

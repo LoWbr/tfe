@@ -71,7 +71,7 @@ public class SportsMan  {
         return firstName;
     }
 
-    public void setFirstName(String name) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
@@ -197,7 +197,7 @@ public class SportsMan  {
         this.email = sportsManForm.getMail();
         this.description = sportsManForm.getDescription();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        this.dateOfBirth = LocalDate.parse(sportsManForm.getDateofBirth(),formatter);
+        this.dateOfBirth = LocalDate.parse(sportsManForm.getDateofBirth(),formatter).plusDays(1);
         this.weight = sportsManForm.getWeight();
         this.points = 0;
         this.blocked = false;
@@ -208,6 +208,9 @@ public class SportsMan  {
         this.lastName = sportsManForm.getLastname();
         this.email = sportsManForm.getMail();
         this.description = sportsManForm.getDescription();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        this.dateOfBirth = LocalDate.parse(sportsManForm.getDateofBirth(),formatter).plusDays(1);
+        this.weight = sportsManForm.getWeight();
     }
 
     public boolean checkLevelStatus() {
