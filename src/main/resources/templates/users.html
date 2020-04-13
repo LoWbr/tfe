@@ -1,0 +1,27 @@
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+<th:block th:include="/navbar"></th:block>
+<h3>Find a Friend!!</h3>
+<table>
+    <thead>
+    <tr>
+        <th> User</th>
+        <th> Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="sporstman : ${allUsers}">
+        <td><span th:text="${sporstman.getName()}"> Title </span></td>
+        <td>
+            <span th:if="${sporstman.getBlocked()}" th:text="BLOCKED"></span>
+            <span th:unless="${sporstman.getBlocked()}" th:text="Active"></span>
+        </td>
+        <td><a th:href="@{/user(id=${sporstman.getId()})}">Details</a></td>
+    </tr>
+    </tbody>
+</table>
+</body>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${sportsMan.getFirstName()}">Title</title>
+</head>
+<body>
+<th:block th:include="/navbar"></th:block>
+<p>this is the page of :</p>
+<h3 th:text="${sportsMan.getFirstName()}"></h3>
+<table>
+    <thead>
+    <tr>
+        <th> Created Events</th>
+        <th> Participated Events</th>
+        <th> Friends</th>
+        <th> Points</th>
+        <th> Level</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><span th:text="${sportsMan.getCreatedActivities().size()}"> Title </span></td>
+        <td><a th:href="@{/getMakeEvent(id=${sportsMan.getId()})}" th:text="${sportsMan.getRegisteredActivities().size()}"> Title </a></td>
+        <td><span th:text="${sportsMan.getContacts().size()}"> Title </span></td>
+        <td><span th:text="${sportsMan.getPoints()}"> Title </span></td>
+        <td><span th:text="${sportsMan.getLevel().getName()}"> Title </span></td>
+    </tr>
+    </tbody>
+</table>
+<form th:action="@{/addContact(id=${sportsMan.getId()})}"
+      th:object="${sportsManForm}" method="POST">
+    <select th:name="contact" multiple="multiple">
+        <option value="" disabled selected> Add Contact</option>
+        <option th:each="user : ${allUsers}"
+                th:value="${user.getId()}"
+                th:utext="${user.getFirstName()}">
+        </option>
+    </select>
+    <span th:if="${sportsMan.getBlocked()}"><button class="btn btn-secondary" type="submit"
+                                                    th:disabled="true">No Way</button></span>
+    <span th:unless="${sportsMan.getBlocked()}"><button class="btn btn-secondary" type="submit"
+                                                        th:disabled="false">Save</button></span>
+</form>
+<form th:action="@{/removeContact(id=${sportsMan.getId()})}"
+      th:object="${sportsManForm}" method="POST">
+    <select th:name="contact" multiple="multiple">
+        <option value="" disabled selected> Remove Contact</option>
+        <option th:each="user : ${contacts}"
+                th:value="${user.getId()}"
+                th:utext="${user.getFirstName()}">
+        </option>
+    </select>
+    <span th:if="${sportsMan.getBlocked()}"><button class="btn btn-secondary" type="submit"
+                                                    th:disabled="true">No Way</button></span>
+    <span th:unless="${sportsMan.getBlocked()}"><button class="btn btn-secondary" type="submit"
+                                                        th:disabled="false">Save</button></span>
+</form>
+<h3>Historic</h3>
+<table>
+    <thead>
+    <tr>
+        <th> Event</th>
+        <th> EarnedPoints</th>
+        <th> EnergyExpenditure</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="statistic : ${statistics}">
+        <td><span th:text="${statistic.getActivity().getName()}"> Title </span></td>
+        <td><span th:text="${statistic.getEarnedPoints()}"> Title </span></td>
+        <td><span th:text="${statistic.getEnergyExpenditure()}"> Title </span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

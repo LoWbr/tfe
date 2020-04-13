@@ -1,0 +1,57 @@
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+<th:block th:include="/navbar"></th:block>
+<h3>Add a new Event</h3>
+<form th:action="@{/updateEvent}"
+      th:object="${activityForm}" method="POST">
+    <div class="form-group">
+        <label th:for="${activityForm}">Nom</label>
+        <input class="form-control" type="text" th:placeholder="${activityForm.getName()}" th:field="*{name}" required
+               minlength="5" maxlength="30"/></div>
+    <div class="form-group">
+        <label th:for="${activityForm}">Description</label>
+        <textarea class="form-control" type="text" th:placeholder="${activityForm.getDescription()}" th:field="*{description}" required
+                  rows="10" cols="30"/>Few words about the activity</textarea>
+    </div>
+    <div class="form-group">
+        <label th:for="${activityForm}">Planned For</label>
+        <!--<input class="form-control" type="date" th:field="*{plannedTo}" required>-->
+        <input class="form-control" type="date" th:placeholder="${activityForm.getPlannedTo()}" th:field="*{plannedTo}" required>
+    </div>
+    <!--<div class="form-group">
+        <label th:for="${activityForm}">Planned For</label>
+        <input class="form-control" type="time" th:field="*{hour}" required>
+    </div>-->
+    <div class="form-group">
+        <label>
+            <select class="form-control" th:field="*{activity}">
+                <option value="" disabled selected> Choose a kind of Activity</option>
+                <option th:each="type : ${allKinds}"
+                        th:value="${type.getId()}"
+                        th:utext="${type.getName()}">
+                </option>
+            </select>
+        </label>
+    </div>
+    <div class="form-group">
+        <label>
+            <select class="form-control" th:field="*{minimumLevel}">
+                <option value="" disabled selected> Choose a kind of Activity</option>
+                <option th:each="level : ${allLevels}"
+                        th:value="${level.getId()}"
+                        th:utext="${level.getName()}">
+                </option>
+            </select>
+        </label>
+    </div>
+    <div class="form-group">
+        <label th:for="${activityForm}">Duration</label>
+        <input class="form-control" th:placeholder="${activityForm.getDuration()}" type="number" th:field="*{duration}" required/></div>
+    <input type="hidden" th:field="*{id}" required/>
+    <button class="btn btn-secondary" type="submit">Save</button>
+</form>
+</body>
