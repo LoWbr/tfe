@@ -4,6 +4,8 @@ import init.crud1.entity.*;
 import init.crud1.exception.UserAlreadyExistException;
 import init.crud1.form.SportsManForm;
 import init.crud1.repository.*;
+import init.crud1.service.ActivityService;
+import init.crud1.service.SportsManService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -20,51 +22,35 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
-/*
-@RequestMapping("/user")
-*/
 public class SportsManController {
 
     @Autowired
-    SportsManRepository sportsManRepository;
+    SportsManService sportsManService;
 
     @Autowired
-    ActivityRepository activityRepository;
-
-    @Autowired
-    StatisticRepository statisticRepository;
-
-    @Autowired
-    LevelRepository levelRepository;
-
-    @Autowired
-    RoleRepository roleRepository;
+    ActivityService activityService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @RequestMapping("/users")
     public String getHome(Model model) {
-        Iterable<SportsMan> allUsers = sportsManRepository.findAll();
-        model.addAttribute("allUsers", allUsers);
+        model.addAttribute("allUsers", sportsManService.getAllUser());
         return "users";
     }
 
     @RequestMapping(value = "saveUser", method = RequestMethod.POST)
-    public String saveEvent(@Valid /*@ModelAttribute("EventForm")*/ SportsManForm sportsManForm, BindingResult bindingResult) throws UserAlreadyExistException {
+    public String saveEvent(@Valid SportsManForm sportsManForm, BindingResult bindingResult) throws UserAlreadyExistException {
 
         if(bindingResult.hasErrors()){
             System.out.println("Errors: " + bindingResult.getErrorCount());
             return "signUp";
         }
-
         SportsMan sportsMan = new SportsMan(sportsManForm);
-        Level level = levelRepository.findSpecific(new Long(1));
-        sportsMan.setLevel(level);
-        List<Role> roleList = roleRepository.findForInitialize(new Long(1));
-        sportsMan.setRoles(roleList);
+        sportsMan.setLevel(sportsManService.findSpecificLevel(new Long(1)));
+        sportsMan.setRoles(sportsManService.findSpecificRole(new Long(1)));
         sportsMan.setPassword(passwordEncoder.encode(sportsManForm.getPassword()));
-        if(this.sportsManRepository.findSpecific(sportsMan.getEmail()) != null) {
+        if(this.sportsManService.findCurrentUser(sportsMan.getEmail()) != null) {
             bindingResult.rejectValue("mail", "", "This account already exists");
             return "signUp";
         }
@@ -73,12 +59,10 @@ public class SportsManController {
             return "signUp";
         }
         else{
-            sportsManRepository.save(sportsMan);
+            sportsManService.saveUser(sportsMan);
         }
         return "users";
-
         /* VALIDE
-
         if (this.sportsManRepository.findSpecific(sportsMan.getEmail()) == null) {
                 sportsManRepository.save(sportsMan);
             } else {
@@ -89,49 +73,44 @@ public class SportsManController {
 
     @RequestMapping(value = "/user/update", method = RequestMethod.GET)
     public String getUpdateSportsManForm(Model model, Principal principal) {
-        SportsMan sportsMan = this.sportsManRepository.findSpecific(principal.getName());
-        SportsManForm sportsManForm = new SportsManForm(sportsMan);
+        SportsManForm sportsManForm = new SportsManForm(sportsManService.findCurrentUser(principal.getName()));
         model.addAttribute("sportsManForm", sportsManForm);
         return "updateUser";
     }
 
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
     public String updateEvent(@ModelAttribute("sportsManForm") SportsManForm sportsManForm, Principal principal) {
-        SportsMan sportsMan = this.sportsManRepository.findSpecific(principal.getName());
+        SportsMan sportsMan = sportsManService.findCurrentUser(principal.getName());
         sportsMan.updateSportsMan(sportsManForm);
-        this.sportsManRepository.save(sportsMan);
+        sportsManService.saveUser(sportsMan);
         return "users";
     }
 
     @RequestMapping(value = "/ownEvents", method = RequestMethod.GET)
     public String block(Model model, Principal principal) {
-        SportsMan sportsMan = this.sportsManRepository.findSpecific(principal.getName());
-        List<Activity> ownCreations = this.activityRepository.findByCreator(sportsMan);
-        model.addAttribute("ownCreations",ownCreations);
+        SportsMan sportsMan = this.sportsManService.findCurrentUser(principal.getName());
+        model.addAttribute("ownCreations",activityService.getAllOfTheSameCreator(sportsMan));
         return "ownEvents";
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public String userDetails(Principal principal, Model model) {
-        SportsMan sportsMan = this.sportsManRepository.findSpecific(principal.getName());
+        SportsMan sportsMan = this.sportsManService.findCurrentUser(principal.getName());
         if (sportsMan.getContacts().size() == 0) {
-            Iterable<SportsMan> allUsers = sportsManRepository.findAllWithoutMe(sportsMan.getId());
-            model.addAttribute("allUsers", allUsers);
+            model.addAttribute("allUsers", sportsManService.getAllExceptCurrent(sportsMan.getId()));
         } else {
-            Iterable<SportsMan> allUsers = sportsManRepository.findNotContacts(sportsMan.getContacts(), sportsMan.getId());
-            model.addAttribute("allUsers", allUsers);
+            model.addAttribute("allUsers", sportsManService.getAllNoContats(sportsMan.getContacts(), sportsMan.getId()));
         }
         Iterable<SportsMan> contacts = sportsMan.getContacts();
         model.addAttribute("contacts", contacts);
         model.addAttribute("sportsMan", sportsMan);
-        Iterable<Statistic> statistics = statisticRepository.findBySportsMan(sportsMan);
-        model.addAttribute("statistics", statistics);
+        model.addAttribute("statistics", sportsManService.findBySportsMan(sportsMan));
         return "userDetails";
     }
 
     @RequestMapping(value = "/getMakeEvent{id}", method = RequestMethod.GET)
     public String getMakeEvent(@RequestParam Long id, Model model) {
-        SportsMan sportsMan = this.sportsManRepository.findSpecific(id);
+        SportsMan sportsMan = this.sportsManService.findSpecificUser(id);
         model.addAttribute("sportsMan", sportsMan);
         return "userParticipatedEvents";
     }
@@ -139,22 +118,22 @@ public class SportsManController {
     @RequestMapping(value = "/addContact{id}", method = RequestMethod.POST)
     public String addContact(@RequestParam(value = "contact") Long[] idContact,
                              @RequestParam(value = "id") Long id) {
-        SportsMan sportsMan = sportsManRepository.findSpecific(id);
+        SportsMan sportsMan = sportsManService.findSpecificUser(id);
         for (Long user : idContact) {
-            sportsMan.addContact(sportsManRepository.findSpecific(user));
+            sportsMan.addContact(sportsManService.findSpecificUser(user));
         }
-        sportsManRepository.save(sportsMan);
+        sportsManService.saveUser(sportsMan);
         return "redirect:/users";
     }
 
     @RequestMapping(value = "/removeContact{id}", method = RequestMethod.POST)
     public String removeContact(@RequestParam(value = "contact") Long[] idContact,
                                 @RequestParam(value = "id") Long id) {
-        SportsMan sportsMan = sportsManRepository.findSpecific(id);
+        SportsMan sportsMan = sportsManService.findSpecificUser(id);
         for (Long user : idContact) {
-            sportsMan.removeContact(sportsManRepository.findSpecific(user));
+            sportsMan.removeContact(sportsManService.findSpecificUser(user));
         }
-        sportsManRepository.save(sportsMan);
+        sportsManService.saveUser(sportsMan);
         return "redirect:/users";
     }
 
