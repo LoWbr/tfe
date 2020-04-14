@@ -1,9 +1,6 @@
 package init.crud1.form;
 
-import init.crud1.entity.Activity;
-import init.crud1.entity.ActivityType;
-import init.crud1.entity.Level;
-import init.crud1.entity.SportsMan;
+import init.crud1.entity.*;
 
 import java.sql.Time;
 import java.time.LocalDate;
@@ -19,7 +16,9 @@ public class ActivityForm {
 /*    private String hour;*/
     private ActivityType activity;
     private Level minimumLevel;
+    private Level maximumLevel;
     private Integer duration;
+    private String address;
 
     public Long getId() {
         return id;
@@ -77,12 +76,28 @@ public class ActivityForm {
         this.minimumLevel = minimumLevel;
     }
 
+    public Level getMaximumLevel() {
+        return maximumLevel;
+    }
+
+    public void setMaximumLevel(Level maximumLevel) {
+        this.maximumLevel = maximumLevel;
+    }
+
     public Integer getDuration() {
         return duration;
     }
 
     public void setDuration(Integer duration) {
         this.duration = duration;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public ActivityForm() {
@@ -95,6 +110,8 @@ public class ActivityForm {
         this.plannedTo = activity.getPlannedTo().toString();
         this.activity = activity.getActivity();
         this.minimumLevel = activity.getMinimumLevel();
+        this.maximumLevel = activity.getMaximumLevel();
         this.duration = activity.getDuration();
+        this.address = activity.getAddress();
     }
 }

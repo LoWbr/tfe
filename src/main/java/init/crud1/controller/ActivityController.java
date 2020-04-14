@@ -44,7 +44,8 @@ public class ActivityController {
     }
 
     @RequestMapping(value = "saveEvent", method = RequestMethod.POST)
-    public String saveEvent(@ModelAttribute("ActivityForm") ActivityForm activityForm, Principal principal) throws ParseException {
+    public String saveEvent(@ModelAttribute("ActivityForm") ActivityForm activityForm,
+                            Principal principal) throws ParseException {
         SportsMan sportsMan = sportsManService.findCurrentUser(principal.getName());
         Activity activity = new Activity(activityForm, sportsMan);
         activityService.saveActivity(activity);

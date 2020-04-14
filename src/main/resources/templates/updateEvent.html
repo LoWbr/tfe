@@ -56,7 +56,7 @@
                     </div>
                     <div class="pure-u-1-4">
                         <label>Maximum Level</label>
-                        <select class="pure-u-23-24">
+                        <select class="pure-u-23-24" th:field="*{maximumLevel}">
                             <option th:each="level : ${allLevels}"
                                     th:value="${level.getId()}"
                                     th:utext="${level.getName()}">

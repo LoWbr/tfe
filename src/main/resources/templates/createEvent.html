@@ -15,21 +15,21 @@
         <legend>Create your Activity</legend>
         <div class="pure-g">
             <div class="pure-u-1-2">
-                <label th:for="${sportsManForm}">Name</label>
+                <label>Name</label>
                 <input class="pure-u-23-24" type="text" th:field="*{name}"/>
                 <div>
                     <span class="text-danger" th:errors="*{name}"> </span>
                 </div>
             </div>
                 <div class="pure-u-1-2">
-                    <label th:for="${sportsManForm}">When?</label>
+                    <label>When?</label>
                     <input class="pure-u-24-24" type="date" th:field="*{plannedTo}"/>
                     <div>
                         <span class="text-danger" th:errors="*{plannedTo}"> </span>
                     </div>
                 </div>
                 <div class="pure-u-1-1">
-                    <label th:for="${sportsManForm}">What do you plan?</label>
+                    <label>What do you plan?</label>
                     <textarea th:field="*{description}" class="pure-u-24-24"
                               rows="6"/></textarea>
                     <div>
@@ -56,7 +56,7 @@
                 </div>
                 <div class="pure-u-1-4">
                     <label>Maximum Level</label>
-                    <select class="pure-u-23-24">
+                    <select class="pure-u-23-24" th:field="*{maximumLevel}">
                         <option th:each="level : ${allLevels}"
                                 th:value="${level.getId()}"
                                 th:utext="${level.getName()}">
@@ -64,7 +64,7 @@
                     </select>
                 </div>
                 <div class="pure-u-1-4">
-                    <label th:for="${sportsManForm}">Duration</label>
+                    <label>Duration</label>
                     <input class="pure-u-24-24" type="number" th:field="*{duration}">
                     <div>
                         <span class="text-danger" th:errors="*{duration}"> </span>

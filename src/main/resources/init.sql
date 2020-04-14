@@ -26,18 +26,18 @@ INSERT INTO sports_man (first_name,last_name,description,date_of_birth,weight,po
 ('Troy','Devrieze','Militaire et Patate Mariée','1990-07-29',65,36,'troy@gmail.com','$2y$10$.Xp0.U7Xym8UzPNIKTO/Ted7AZckkHRMWJ4tybWEgZVRXD.5WGkm2',1);
 
 --Old Events
-INSERT INTO activity (name, fk_type_activity, fk_creator,duration,open,over,fk_minimum_level, planned_to) VALUES
-('Initiation Crawl',3,1,90,true,true,1,'2020-08-10 14:00:00' ),
-('Namur-Ottiginies',1,2,60,true,true,2,'2020-07-15 09:30:00'),
-('Cross au Bois de Malonne',2,1,180,true,true,1,'2020-07-04 08:00:00'),
-('Descente de la Meuse',3,3,45,true,true,1,'2020-06-25 17:30:00');
+INSERT INTO activity (name, fk_type_activity, fk_creator,duration,open,over,fk_minimum_level, fk_maximum_level, planned_to) VALUES
+('Initiation Crawl',3,1,90,true,true,1,1,'2020-08-10 14:00:00' ),
+('Namur-Ottiginies',1,2,60,true,true,2,4,'2020-07-15 09:30:00'),
+('Cross au Bois de Malonne',2,1,180,true,true,1,2,'2020-07-04 08:00:00'),
+('Descente de la Meuse',3,3,45,true,true,1,3,'2020-06-25 17:30:00');
 
 --Current Events
-INSERT INTO activity (name, fk_type_activity, fk_creator,duration,open,over,fk_minimum_level, planned_to) VALUES
-('Brasse Bien Grasse',3,1,90,false,false,2,'2020-08-10 14:00:00' ),
-('Footing Mosan',2,2,60,true,false,1,'2020-07-15 09:30:00'),
-('Vélo en Folie',1,3,180,true,false,1,'2020-07-04 08:00:00'),
-('Run & Beer',2,1,45,true,false,3,'2020-06-25 17:30:00');
+INSERT INTO activity (name, fk_type_activity, fk_creator,duration,open,over,fk_minimum_level, fk_maximum_level, planned_to) VALUES
+('Brasse Bien Grasse',3,1,90,false,false,2,3,'2020-08-10 14:00:00' ),
+('Footing Mosan',2,2,60,true,false,1,2,'2020-07-15 09:30:00'),
+('Vélo en Folie',1,3,180,true,false,1,1,'2020-07-04 08:00:00'),
+('Run & Beer',2,1,45,true,false,3,4,'2020-06-25 17:30:00');
 
 INSERT INTO activity_registered(registered_activities_id, registered_id) VALUES
 (1,1),

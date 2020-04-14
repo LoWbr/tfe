@@ -39,9 +39,16 @@ public class Activity {
     @JoinColumn(name="fk_type_activity", referencedColumnName = "id", nullable = false)
     private ActivityType activity;
 
+    @Column(name="address")
+    private String address;
+
     @OneToOne
     @JoinColumn(name="fk_minimum_level", referencedColumnName = "id", nullable = false)
     private Level minimumLevel;
+
+    @OneToOne
+    @JoinColumn(name="fk_maximum_level", referencedColumnName = "id", nullable = false)
+    private Level maximumLevel;
 
     @Column(name="duration", nullable = true)
     private Integer duration;
@@ -144,12 +151,28 @@ public class Activity {
         this.registered = registered;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public Level getMinimumLevel() {
         return minimumLevel;
     }
 
     public void setMinimumLevel(Level minimumLevel) {
         this.minimumLevel = minimumLevel;
+    }
+
+    public Level getMaximumLevel() {
+        return maximumLevel;
+    }
+
+    public void setMaximumLevel(Level maximumLevel) {
+        this.maximumLevel = maximumLevel;
     }
 
     public List<SportsMan> getCandidate() {
@@ -187,6 +210,7 @@ public class Activity {
         /*DateTimeFormatter sdf = DateTimeFormatter.ofPattern("hh:mm:ss");
         this.hour = LocalTime.parse(activityForm.getHour(), sdf);*/
         this.minimumLevel = activityForm.getMinimumLevel();
+        this.maximumLevel = activityForm.getMaximumLevel();
         this.duration = activityForm.getDuration();
         this.activity = activityForm.getActivity();
         this.creator = sportsMan;
@@ -210,6 +234,7 @@ public class Activity {
         this.plannedTo = LocalDate.parse(activityForm.getPlannedTo(),formatter).plusDays(1);
         this.duration = activityForm.getDuration();
         this.minimumLevel = activityForm.getMinimumLevel();
+        this.maximumLevel = activityForm.getMaximumLevel();
     }
 
     public void closeEvent() {
