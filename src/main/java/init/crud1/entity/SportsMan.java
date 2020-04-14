@@ -4,6 +4,7 @@ import init.crud1.form.SportsManForm;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -218,6 +219,11 @@ public class SportsMan  {
             return true;
         }
         return false;
+    }
+
+    public int getAge(){
+        LocalDate current = LocalDate.now();
+        return Period.between(dateOfBirth,current).getYears();
     }
 
 }
