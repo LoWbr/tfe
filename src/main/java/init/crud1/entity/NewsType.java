@@ -8,6 +8,7 @@ public enum NewsType {
     DONE_EVENT,
     LEVEL_UP,
     VALIDATED_REQUEST,
-    COMMENTED_EVENT
+    COMMENTED_EVENT,
+    APPLY_AS_CONFIRMED
 
 }

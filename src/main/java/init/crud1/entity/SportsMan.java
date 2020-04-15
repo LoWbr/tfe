@@ -181,6 +181,11 @@ public class SportsMan  {
         this.roles = roles;
     }
 
+    public void addRoles(Role role) {
+        roles.add(role);
+    }
+
+
     public void addContact(SportsMan sportsMan) {
         this.contacts.add(sportsMan);
     }

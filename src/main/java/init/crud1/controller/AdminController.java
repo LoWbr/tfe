@@ -7,6 +7,7 @@ import init.crud1.repository.ActivityRepository;
 import init.crud1.repository.ActivityTypeRepository;
 import init.crud1.repository.SportsManRepository;
 import init.crud1.service.ActivityService;
+import init.crud1.service.ManagementService;
 import init.crud1.service.SportsManService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,20 +22,23 @@ import java.util.List;
 @Controller
 public class AdminController {
 
-    ActivityService activityService;
-
-    SportsManService sportsManService;
+    private ActivityService activityService;
+    private SportsManService sportsManService;
+    private ManagementService managementService;
 
     @Autowired
-    public AdminController(ActivityService activityService, SportsManService sportsManService) {
+    public AdminController(ActivityService activityService, SportsManService sportsManService,
+                           ManagementService managementService) {
         this.activityService = activityService;
         this.sportsManService = sportsManService;
+        this.managementService = managementService;
     }
 
     @RequestMapping("/manage")
     public String getHome(Model model) {
         TopicForm topicForm = new TopicForm();
         model.addAttribute("allUsers", sportsManService.getAllUser());
+        model.addAttribute("allCandidates", managementService.getPromotionCandidates());
         model.addAttribute("allActivities", activityService.getAllActivities());
         model.addAttribute("topicForm", topicForm);
         return "adminPage";
@@ -77,6 +81,16 @@ public class AdminController {
             activityService.saveActivity(activity);
         }
         sportsManService.saveUser(sportsMan);
+        return "redirect:/manage";
+    }
+
+    @RequestMapping(value = "/promote{id}", method = RequestMethod.GET)
+    public String promoteUser(@RequestParam(value = "id") Long id) {
+        SportsMan sportsMan = sportsManService.findSpecificUser(id);
+        sportsMan.addRoles(sportsManService.findRole((long) 2));
+        sportsManService.saveUser(sportsMan);
+        managementService.removeRequest(managementService.findSpecific(sportsMan));
+        //Add notification!!
         return "redirect:/manage";
     }
 

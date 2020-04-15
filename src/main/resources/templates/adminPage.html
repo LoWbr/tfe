@@ -42,11 +42,14 @@
     <tr>
         <th> User</th>
         <th> Status</th>
+        <th> Block/Unblock</th>
+        <th> More</th>
+        <th> Promote</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="sporstman : ${allUsers}">
-        <td><span th:text="${sporstman.getName()}"> Title </span></td>
+        <td><span th:text="${sporstman.getFirstName()}"> Title </span></td>
         <td>
             <span th:if="${sporstman.getBlocked()}" th:text="BLOCKED"></span>
             <span th:unless="${sporstman.getBlocked()}" th:text="Active"></span>
@@ -58,6 +61,10 @@
                     th:href="@{/user/block(id=${sporstman.getId()})}">Block</a></span>
         </td>
         <td><a th:href="@{/user(id=${sporstman.getId()})}">Details</a></td>
+        <td>
+            <span th:if="${allCandidates.contains(sporstman)}"><a th:href="@{/promote(id=${sporstman.getId()})}">Promote</a></span>
+            <span th:unless="${allCandidates.contains(sporstman.getId())}"></span>
+        </td>
     </tr>
     </tbody>
 </table>

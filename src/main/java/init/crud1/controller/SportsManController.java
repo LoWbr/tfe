@@ -5,6 +5,7 @@ import init.crud1.exception.UserAlreadyExistException;
 import init.crud1.form.SportsManForm;
 import init.crud1.repository.*;
 import init.crud1.service.ActivityService;
+import init.crud1.service.ManagementService;
 import init.crud1.service.SportsManService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +32,9 @@ public class SportsManController {
     ActivityService activityService;
 
     @Autowired
+    ManagementService managementService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @RequestMapping("/users")
@@ -40,7 +44,7 @@ public class SportsManController {
     }
 
     @RequestMapping(value = "saveUser", method = RequestMethod.POST)
-    public String saveEvent(@Valid SportsManForm sportsManForm, BindingResult bindingResult) throws UserAlreadyExistException {
+    public String saveUser(@Valid SportsManForm sportsManForm, BindingResult bindingResult) throws UserAlreadyExistException {
 
         if(bindingResult.hasErrors()){
             System.out.println("Errors: " + bindingResult.getErrorCount());
@@ -135,6 +139,20 @@ public class SportsManController {
         }
         sportsManService.saveUser(sportsMan);
         return "redirect:/users";
+    }
+
+    @RequestMapping(value = "/applyAsConfirmed", method = RequestMethod.GET)
+    public String apply(Principal principal) {
+        SportsMan sportsMan = this.sportsManService.findCurrentUser(principal.getName());
+        //Créer une demande de promotion
+        PromotionRequest promotionRequest = new PromotionRequest(sportsMan,sportsManService.findRole((long) 2));
+        managementService.saveRequest(promotionRequest);
+        //Créer une notification pour l'administrateur
+        for (SportsMan user:sportsManService.findAuthority(sportsManService.findRole((long) 3))) {
+            News news = new News(user,sportsMan,null,NewsType.APPLY_AS_CONFIRMED,false);
+            this.managementService.saveNews(news);
+        }
+        return "redirect:/user";
     }
 
 }

@@ -67,4 +67,14 @@ public class News{
     public void setSeen(boolean seen) {
         this.seen = seen;
     }
+
+    public News(){}
+
+    public News(SportsMan target, SportsMan source, Activity activity, NewsType type, boolean seen) {
+        this.target = target;
+        this.source = source;
+        this.activity = activity;
+        this.type = type;
+        this.seen = seen;
+    }
 }

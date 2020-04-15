@@ -75,9 +75,18 @@ public class SportsManService {
         return this.levelRepository.findSpecific(id);
     }
 
-    //FindSpecificRole
+    //FindAllRole
     public List<Role> findSpecificRole(Long id){
         return this.roleRepository.findForInitialize(id);
+    }
+
+    //FindSpecificRole
+    public Role findRole(Long id){
+        return this.roleRepository.findForPromotion(id);
+    }
+
+    public Iterable<SportsMan> findAuthority(Role role){
+        return this.sportsManRepository.selectAuthorityUsers(role);
     }
 
 }

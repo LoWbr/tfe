@@ -30,4 +30,8 @@ public interface SportsManRepository extends CrudRepository<SportsMan, Long> {
     SportsMan findSpecific(
             @Param("email") String email);
 
+    @Query("Select sportsman from SportsMan sportsman where :role member of sportsman.roles")
+    List<SportsMan> selectAuthorityUsers(
+            @Param("role") Role role);
+
 }
