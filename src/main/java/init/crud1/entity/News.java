@@ -32,13 +32,13 @@ public class News{
         this.id = id;
     }
 
-    /*public SportsMan getTarget() {
+    public SportsMan getTarget() {
         return target;
     }
 
     public void setTarget(SportsMan target) {
         this.target = target;
-    }*/
+    }
 
     public SportsMan getSource() {
         return source;

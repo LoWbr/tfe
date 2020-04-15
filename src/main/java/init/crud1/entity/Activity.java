@@ -3,15 +3,8 @@ package init.crud1.entity;
 import init.crud1.form.ActivityForm;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -39,8 +32,9 @@ public class Activity {
     @JoinColumn(name="fk_type_activity", referencedColumnName = "id", nullable = false)
     private ActivityType activity;
 
-    @Column(name="address")
-    private String address;
+    @OneToOne
+    @JoinColumn(name="fk_address", referencedColumnName = "id", nullable = false)
+    private Address address;
 
     @OneToOne
     @JoinColumn(name="fk_minimum_level", referencedColumnName = "id", nullable = false)
@@ -151,11 +145,11 @@ public class Activity {
         this.registered = registered;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
