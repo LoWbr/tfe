@@ -1,11 +1,10 @@
 package init.crud1.service;
 
-import init.crud1.entity.News;
-import init.crud1.entity.PromotionRequest;
-import init.crud1.entity.Role;
-import init.crud1.entity.SportsMan;
+import init.crud1.entity.*;
+import init.crud1.repository.ActivityTypeRepository;
 import init.crud1.repository.NewsRepository;
 import init.crud1.repository.PromotionRequestRepository;
+import init.crud1.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +19,12 @@ public class ManagementService {
 
     @Autowired
     NewsRepository newsRepository;
+
+    @Autowired
+    ActivityTypeRepository activityTypeRepository;
+
+    @Autowired
+    TopicRepository topicRepository;
 
     public void saveRequest(PromotionRequest promotionRequest){
         this.promotionRequestRepository.save(promotionRequest);
@@ -47,6 +52,15 @@ public class ManagementService {
         return candidates;
     }
 
+    public void saveTopic(Topic topic) {
+        this.topicRepository.save(topic);
+    }
 
+    public ActivityType findSpecificActivityType(Long id) {
+        return this.activityTypeRepository.findSpecific(id);
+    }
 
+    public void saveType(ActivityType activityType) {
+        this.activityTypeRepository.save(activityType);
+    }
 }

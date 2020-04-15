@@ -1,7 +1,11 @@
 package init.crud1.controller;
 
 import init.crud1.entity.Activity;
+import init.crud1.entity.ActivityType;
 import init.crud1.entity.SportsMan;
+import init.crud1.entity.Topic;
+import init.crud1.form.ActivityForm;
+import init.crud1.form.ActivityTypeForm;
 import init.crud1.form.TopicForm;
 import init.crud1.repository.ActivityRepository;
 import init.crud1.repository.ActivityTypeRepository;
@@ -12,11 +16,9 @@ import init.crud1.service.SportsManService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -92,6 +94,31 @@ public class AdminController {
         managementService.removeRequest(managementService.findSpecific(sportsMan));
         //Add notification!!
         return "redirect:/manage";
+    }
+
+    @RequestMapping(value = "/addTopic", method = RequestMethod.POST)
+    public String createTopic(@ModelAttribute("topicForm") TopicForm topicForm,
+                              Principal principal) {
+        SportsMan sportsMan = sportsManService.findCurrentUser(principal.getName());
+        Topic topic = new Topic(sportsMan,topicForm);
+        this.managementService.saveTopic(topic);
+        return "redirect:/manage";
+    }
+
+    @RequestMapping(value = "/manageSportsSetting", method = RequestMethod.GET)
+    public String manageSportsSetting(Model model) {
+        ActivityTypeForm activityTypeForm = new ActivityTypeForm();
+        model.addAttribute("activityTypeForm",activityTypeForm);
+        model.addAttribute("activityTypes",activityService.getAllActivityTypes());
+        return "setSportsComponent";
+    }
+
+    @RequestMapping(value = "/updateType{id}", method = RequestMethod.POST)
+    public String createTopic(@RequestParam(value = "id") Long id, @ModelAttribute("activityTypeForm") ActivityTypeForm activityTypeForm) {
+        ActivityType activityType = managementService.findSpecificActivityType(id);
+        activityType.update(activityTypeForm);
+        this.managementService.saveType(activityType);
+        return "redirect:/manageSportsSetting";
     }
 
 }
