@@ -13,7 +13,7 @@ public class Address {
     @Column(name = "number")
     private int number;
 
-    @Column(name = "city", length = 60)
+    @Column(name = "street", length = 60)
     private String street;
 
     @Column(name = "postalCode")

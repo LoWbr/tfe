@@ -33,7 +33,7 @@ public class Activity {
     private ActivityType activity;
 
     @OneToOne
-    @JoinColumn(name="fk_address", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name="fk_address", referencedColumnName = "id"/*, nullable = false*/)
     private Address address;
 
     @OneToOne

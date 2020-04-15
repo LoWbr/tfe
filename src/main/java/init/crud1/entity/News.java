@@ -18,6 +18,10 @@ public class News{
     @JoinColumn(name="sportsManSource", referencedColumnName = "id", nullable = false)
     private SportsMan source;
 
+    @OneToOne
+    @JoinColumn(name="concernedActivity", referencedColumnName = "id", nullable = true)
+    private Activity activity;
+
     @Enumerated(EnumType.STRING)
     private NewsType type;
 

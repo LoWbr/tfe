@@ -1,6 +1,7 @@
 package init.crud1.service;
 
 import init.crud1.entity.*;
+import init.crud1.form.SearchActivityForm;
 import init.crud1.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,11 @@ public class ActivityService {
     //FindByCreator
     public List<Activity> getAllOfTheSameCreator(SportsMan sportsMan){
         return this.activityRepository.findByCreator(sportsMan);
+    }
+
+    //FindForSearch
+    public List<Activity> findForSearch(SearchActivityForm searchActivityForm){
+        return this.activityRepository.filter(searchActivityForm.getActivity(), searchActivityForm.getMinimumLevel());
     }
 
     //AllActivityKinds

@@ -112,6 +112,8 @@ public class ActivityForm {
         this.minimumLevel = activity.getMinimumLevel();
         this.maximumLevel = activity.getMaximumLevel();
         this.duration = activity.getDuration();
+/*
         this.address = activity.getAddress();
+*/
     }
 }
