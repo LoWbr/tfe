@@ -19,11 +19,7 @@ public class GlobalController {
     ActivityService activityService;
 
     @RequestMapping("/")
-    public String getHome(Model model) {
-        int test1 = 5;
-        int test2 = 10;
-        model.addAttribute("test1",test1);
-        model.addAttribute("test2",test2);
+    public String getHome() {
         return "home";
     }
 

@@ -30,8 +30,8 @@ public class WebSecuConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService customUserDetailsService;
 
-    @Autowired
-    private DataSource dataSource;
+/*    @Autowired
+    private DataSource dataSource;*/
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -73,7 +73,7 @@ public class WebSecuConfig extends WebSecurityConfigurerAdapter {
                 .rememberMe()
                 //.key("my-secure-key")
                 .rememberMeCookieName("my-remember-me-cookie")
-                .tokenRepository(persistentTokenRepository())
+               /* .tokenRepository(persistentTokenRepository())*/
                 .tokenValiditySeconds(24 * 60 * 60)
                 .and()
                 .exceptionHandling()
@@ -88,11 +88,11 @@ public class WebSecuConfig extends WebSecurityConfigurerAdapter {
         }
     }
 
-    PersistentTokenRepository persistentTokenRepository() {
+    /*PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl tokenRepositoryImpl = new JdbcTokenRepositoryImpl();
         tokenRepositoryImpl.setDataSource(dataSource);
         return tokenRepositoryImpl;
-    }
+    }*/
 
 }
 
