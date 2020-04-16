@@ -6,36 +6,6 @@
 </head>
 <body>
 <th:block th:include="/navbar"></th:block>
-<table>
-    <thead>
-    <tr>
-        <th> Name</th>
-        <th> Activity type</th>
-        <th> Registered</th>
-        <th> Creator</th>
-        <th> Status</th>
-        <th> Enable/Disable</th>
-        <th> Settings</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="event : ${allActivities}">
-        <td><span th:text="${event.getName()}"> Title </span></td>
-        <td><span th:text="${event.getActivityName()}"> Author </span></td>
-        <td><span th:text="${event.getRegistered().size()}"> Author </span></td>
-        <td><span th:text="${event.getCreatorName()}"> Author </span></td>
-        <td>
-            <span th:if="${event.getOpen()}" th:text="OPEN"></span>
-            <span th:unless="${event.getOpen()}" th:text="CANCELLED"></span>
-        </td>
-        <td>
-            <span th:if="${event.getOpen()}"><a th:href="@{/cancel(id=${event.getId()})}">Cancel</a></span>
-            <span th:unless="${event.getOpen()}"><a th:href="@{/open(id=${event.getId()})}">Active</a></span>
-        </td>
-        <td><a th:href="@{/event(id=${event.getId()})}">Details</a></td>
-    </tr>
-    </tbody>
-</table>
 <h3>All of the Users</h3>
 <table>
     <thead>
@@ -68,11 +38,5 @@
     </tr>
     </tbody>
 </table>
-<form th:action="@{/addTopic}"
-      th:object="${topicForm}" method="POST">
-    <label>Content</label>
-    <textarea name="content" th:field="*{content}" rows="10" cols="30">Ask a question or give an opinion!</textarea>
-    <button class="btn btn-secondary" type="submit">Save</button>
-</form>
 </body>
 </html>

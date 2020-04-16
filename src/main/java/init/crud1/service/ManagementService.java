@@ -1,10 +1,7 @@
 package init.crud1.service;
 
 import init.crud1.entity.*;
-import init.crud1.repository.ActivityTypeRepository;
-import init.crud1.repository.NewsRepository;
-import init.crud1.repository.PromotionRequestRepository;
-import init.crud1.repository.TopicRepository;
+import init.crud1.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +22,9 @@ public class ManagementService {
 
     @Autowired
     TopicRepository topicRepository;
+
+    @Autowired
+    LevelRepository levelRepository;
 
     public void saveRequest(PromotionRequest promotionRequest){
         this.promotionRequestRepository.save(promotionRequest);
@@ -63,4 +63,18 @@ public class ManagementService {
     public void saveType(ActivityType activityType) {
         this.activityTypeRepository.save(activityType);
     }
+
+    public Level findSpecificLevel(Long id) {
+        return this.levelRepository.findSpecific(id);
+    }
+
+    //AllLevels
+    public Iterable<Level> getAllLevels(){
+        return this.levelRepository.findAll();
+    }
+
+    public void saveLevel(Level level) {
+        this.levelRepository.save(level);
+    }
+
 }

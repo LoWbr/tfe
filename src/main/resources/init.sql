@@ -10,12 +10,12 @@ INSERT INTO activity_type (name,met) VALUES
 ('Running',7.8),
 ('Swimming',5.5);
 
-INSERT INTO level (name, place, maximum_threshold) VALUES
-('Beginner',1,50),
-('Active',2,120),
-('Sporstman',3,200),
-('Athlete',4,350),
-('Hero',5,600);
+INSERT INTO level (name, place, maximum_threshold, ratio_points) VALUES
+('Beginner',1,50,1),
+('Active',2,120,0.8),
+('Sporstman',3,200,0.5),
+('Athlete',4,350,0.4),
+('Hero',5,600,0.3);
 
 INSERT INTO sports_man (first_name,last_name,description,date_of_birth,weight,points,email,password, level) VALUES
 ('Laurent','Weber','Chevelu Sportif','1990-05-29',79,50,'lo@gmail.com','$2y$10$e/M4T66Ioz3rZ0fltX7qpeLzonDbP/sD60zehJ77t0SoJUCF.WGMa',1),

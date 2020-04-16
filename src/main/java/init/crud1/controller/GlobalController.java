@@ -48,16 +48,10 @@ public class GlobalController {
     @RequestMapping("/search")
     public String search(@ModelAttribute("searchActivityForm") SearchActivityForm searchActivityForm,
                          Model model, @RequestParam(required = false) Boolean there) {
-/*
-        SearchActivityForm searchActivityForm = new SearchActivityForm();
-*/
         model.addAttribute("allLevels", activityService.getAllLevels());
         model.addAttribute("allKinds", activityService.getAllActivityTypes());
         //if requestparam flag
         if(there != null){
-            //repo => filter
-            //if argument != null
-            //search => Where argument
             model.addAttribute("allEvents",activityService.findForSearch(searchActivityForm));
             model.addAttribute("searchActivityForm",searchActivityForm );
             return "search";
@@ -68,7 +62,6 @@ public class GlobalController {
             model.addAttribute("searchActivityForm",searchActivityForm );
             return "search";
         }
-
     }
 
 }

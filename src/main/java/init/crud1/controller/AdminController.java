@@ -1,15 +1,9 @@
 package init.crud1.controller;
 
-import init.crud1.entity.Activity;
-import init.crud1.entity.ActivityType;
-import init.crud1.entity.SportsMan;
-import init.crud1.entity.Topic;
-import init.crud1.form.ActivityForm;
+import init.crud1.entity.*;
 import init.crud1.form.ActivityTypeForm;
+import init.crud1.form.LevelForm;
 import init.crud1.form.TopicForm;
-import init.crud1.repository.ActivityRepository;
-import init.crud1.repository.ActivityTypeRepository;
-import init.crud1.repository.SportsManRepository;
 import init.crud1.service.ActivityService;
 import init.crud1.service.ManagementService;
 import init.crud1.service.SportsManService;
@@ -19,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 public class AdminController {
@@ -36,14 +29,19 @@ public class AdminController {
         this.managementService = managementService;
     }
 
-    @RequestMapping("/manage")
-    public String getHome(Model model) {
+    @RequestMapping("/manageUsers")
+    public String manageUserSetting(Model model) {
         TopicForm topicForm = new TopicForm();
         model.addAttribute("allUsers", sportsManService.getAllUser());
         model.addAttribute("allCandidates", managementService.getPromotionCandidates());
-        model.addAttribute("allActivities", activityService.getAllActivities());
         model.addAttribute("topicForm", topicForm);
-        return "adminPage";
+        return "manageUsers";
+    }
+
+    @RequestMapping("/manageEvents")
+    public String manageEventSetting(Model model) {
+        model.addAttribute("allActivities", activityService.getAllActivities());
+        return "manageEvents";
     }
 
     @RequestMapping(value = "/cancel{id}", method = RequestMethod.GET)
@@ -110,11 +108,11 @@ public class AdminController {
         ActivityTypeForm activityTypeForm = new ActivityTypeForm();
         model.addAttribute("activityTypeForm",activityTypeForm);
         model.addAttribute("activityTypes",activityService.getAllActivityTypes());
-        return "setSportsComponent";
+        return "setSportsSetting";
     }
 
     @RequestMapping(value = "/updateType{id}", method = RequestMethod.POST)
-    public String updateTopic(@RequestParam(value = "id") Long id, @ModelAttribute("activityTypeForm") ActivityTypeForm activityTypeForm) {
+    public String updateType(@RequestParam(value = "id") Long id, @ModelAttribute("activityTypeForm") ActivityTypeForm activityTypeForm) {
         ActivityType activityType = managementService.findSpecificActivityType(id);
         activityType.update(activityTypeForm);
         this.managementService.saveType(activityType);
@@ -122,11 +120,27 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/addType", method = RequestMethod.POST)
-    public String createTopic(@ModelAttribute("activityTypeForm") ActivityTypeForm activityTypeForm) {
+    public String addType(@ModelAttribute("activityTypeForm") ActivityTypeForm activityTypeForm) {
         ActivityType activityType = new ActivityType();
         activityType.update(activityTypeForm);
         this.managementService.saveType(activityType);
         return "redirect:/manageSportsSetting";
+    }
+
+    @RequestMapping(value = "/manageLevelsSetting", method = RequestMethod.GET)
+    public String manageLevelsSetting(Model model) {
+        LevelForm levelForm = new LevelForm();
+        model.addAttribute("levelForm",levelForm);
+        model.addAttribute("activityLevels",managementService.getAllLevels());
+        return "setLevelsSetting";
+    }
+
+    @RequestMapping(value = "/updateLevel{id}", method = RequestMethod.POST)
+    public String updateLevel(@RequestParam(value = "id") Long id, @ModelAttribute("levelForm") LevelForm levelForm) {
+        Level level = managementService.findSpecificLevel(id);
+        level.update(levelForm);
+        this.managementService.saveLevel(level);
+        return "redirect:/manageLevelsSetting";
     }
 
 }

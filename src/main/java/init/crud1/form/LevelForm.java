@@ -1,36 +1,12 @@
-package init.crud1.entity;
+package init.crud1.form;
 
-import init.crud1.form.LevelForm;
 
-import javax.persistence.*;
+public class LevelForm {
 
-@Entity
-public class Level {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id",updatable = true, nullable = false)
-    private Long id;
-
-    @Column(name = "name")
     private String name;
-
-    @Column(name = "place")
     private Long place;
-
-    @Column(name = "maximum_threshold")
     private Integer maximumThreshold;
-
-    @Column(name = "ratio_points")
     private Double ratioPoints;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -62,14 +38,6 @@ public class Level {
 
     public void setRatioPoints(Double ratioPoints) {
         this.ratioPoints = ratioPoints;
-    }
-
-    public Level(){}
-
-    public void update(LevelForm levelForm){
-        this.name = levelForm.getName();
-        this.maximumThreshold = levelForm.getMaximumThreshold();
-        this.ratioPoints = levelForm.getRatioPoints();
     }
 
 }
