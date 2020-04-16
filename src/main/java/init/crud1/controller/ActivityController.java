@@ -14,9 +14,6 @@ import java.security.Principal;
 import java.text.ParseException;
 
 @Controller
-/*
-@RequestMapping("/event")
-*/
 public class ActivityController {
 
     private ActivityService activityService;
@@ -28,16 +25,16 @@ public class ActivityController {
         this.sportsManService = sportsManService;
     }
 
-    @RequestMapping("/events")
+    @RequestMapping(value ="/events", method = RequestMethod.GET)
     public String getAllEvents(Model model) {
         model.addAttribute("allActivities", activityService.getAllActivities());
         return "events";
     }
 
-    @RequestMapping("/create")
-    public String getHome(Model model) {
+    @RequestMapping(value ="/create", method = RequestMethod.GET)
+    public String createEvent(Model model) {
         ActivityForm activityForm = new ActivityForm();
-        model.addAttribute("activityForm", activityForm);
+        model.addAttribute("activityForm", activityForm);//new ActivityForm() à tester!!
         model.addAttribute("allKinds", activityService.getAllActivityTypes());
         model.addAttribute("allLevels", activityService.getAllLevels());
         return "createEvent";
@@ -46,9 +43,7 @@ public class ActivityController {
     @RequestMapping(value = "saveEvent", method = RequestMethod.POST)
     public String saveEvent(@ModelAttribute("ActivityForm") ActivityForm activityForm,
                             Principal principal) throws ParseException {
-        SportsMan sportsMan = sportsManService.findCurrentUser(principal.getName());
-        Activity activity = new Activity(activityForm, sportsMan);
-        activityService.saveActivity(activity);
+        activityService.createActivity(activityForm, sportsManService.findCurrentUser(principal.getName()));
         return "redirect:/events";
     }
 
@@ -58,27 +53,24 @@ public class ActivityController {
             model.addAttribute("sportsMan", sportsManService.findCurrentUser(principal.getName()));
         }
         Activity activity = activityService.getSpecificActivity(id);
-        model.addAttribute("activity", activity);
-        Iterable<SportsMan> participants = activity.getRegistered();
-        model.addAttribute("participants", participants);
-        Iterable<Comment> comments = activityService.findCommentsForActivity(activity);
-        model.addAttribute("comments", comments);
+        model.addAttribute("activity", activity);//Raccourci encore faisable
+        model.addAttribute("participants", activity.getRegistered());
+        model.addAttribute("comments", activityService.findCommentsForActivity(activity));
         return "eventDetails";
     }
 
     @RequestMapping(value = "/ownEvent{id}", method = RequestMethod.GET)
     public String ownEventDetails(@RequestParam Long id, Model model) {
         Activity activity = activityService.getSpecificActivity(id);
-        model.addAttribute("activity", activity);
+        model.addAttribute("activity", activity);//Raccourci encore faisable
         model.addAttribute("candidates", activity.getCandidate());
         model.addAttribute("participants", activity.getRegistered());
-        Iterable<Comment> comments = activityService.findCommentsForActivity(activity);
-        model.addAttribute("comments", comments);
+        model.addAttribute("comments", activityService.findCommentsForActivity(activity));
         return "ownEventDetails";
     }
 
     @RequestMapping(value = "/event/update{id}", method = RequestMethod.GET)
-    public String getUpdateEventForm(@RequestParam Long id, Model model) {
+    public String updateEventForm(@RequestParam Long id, Model model) {
         ActivityForm activityForm = new ActivityForm(activityService.getSpecificActivity(id));
         model.addAttribute("allKinds", activityService.getAllActivityTypes());
         model.addAttribute("activityForm", activityForm);
@@ -88,61 +80,36 @@ public class ActivityController {
 
     @RequestMapping(value = "/updateEvent", method = RequestMethod.POST)
     public String updateEvent(@ModelAttribute("activityForm") ActivityForm activityForm) {
-        Activity activity = activityService.getSpecificActivity(activityForm.getId());
-        activity.update(activityForm);
-        activityService.saveActivity(activity);
+        activityService.updateActivity(activityService.getSpecificActivity(activityForm.getId()), activityForm);
         return "events";
     }
 
     @RequestMapping(value = "/postulate{id}", method = RequestMethod.GET)
     public String applyAsCandidate(@RequestParam(value = "id") Long id, Principal principal) {
-        Activity activity = activityService.getSpecificActivity(id);
-        activity.getCandidate().add(sportsManService.findCurrentUser(principal.getName()));
-        activityService.saveActivity(activity);
+        activityService.applyAsCandidate(activityService.getSpecificActivity(id),
+                sportsManService.findCurrentUser(principal.getName()));
         return "redirect:/events";
     }
 
     @RequestMapping(value = "/addUser{id}", method = RequestMethod.POST)
-    public String addUser(@RequestParam(value = "candidate") Long[] idParticipant,
-                          @RequestParam(value = "id") Long id) {
-        Activity activity = activityService.getSpecificActivity(id);
-        for (Long user : idParticipant) {
-            activity.addParticipant(sportsManService.findSpecificUser(user));
-            activity.getCandidate().remove(sportsManService.findSpecificUser(user));
-        }
-        activityService.saveActivity(activity);
+    public String addUser(@RequestParam(value = "candidate") Long idParticipant,
+                          @RequestParam(value = "id") Long idActivity) {
+        activityService.addOrRemoveParticipants(activityService.getSpecificActivity(idActivity),
+                sportsManService.findSpecificUser(idParticipant),true);
         return "redirect:/events";
     }
 
     @RequestMapping(value = "/removeUser{id}", method = RequestMethod.POST)
-    public String removeUser(@RequestParam(value = "participant") Long[] idParticipant,
-                             @RequestParam(value = "id") Long id) {
-        Activity activity = activityService.getSpecificActivity(id);
-        for (Long user : idParticipant) {
-            activity.removeParticipant(sportsManService.findSpecificUser(user));
-        }
-        activityService.saveActivity(activity);
+    public String removeUser(@RequestParam(value = "participant") Long idParticipant,
+                             @RequestParam(value = "id") Long idActivity) {
+        activityService.addOrRemoveParticipants(activityService.getSpecificActivity(idActivity),
+                sportsManService.findSpecificUser(idParticipant),false);
         return "redirect:/events";
     }
 
-    //!!A pusher dans le service!!
     @RequestMapping(value = "/close{id}", method = RequestMethod.GET)
-    public String close(@RequestParam(value = "id") Long id) {
-        Activity activity = activityService.getSpecificActivity(id);
-        activity.closeEvent();
-        for (SportsMan sportsman : activity.getRegistered()) {
-            double durationInHours = (double) activity.getDuration() / 60;
-            Integer energeticExpenditure = Math.toIntExact(Math.round(sportsman.getWeight() * durationInHours * activity.getActivity().getMet()));
-            sportsman.setPoints(energeticExpenditure);
-            if (sportsman.checkLevelStatus()){
-                Long new_place = sportsman.getLevel().getPlace()+1;
-                sportsman.setLevel(sportsManService.findSpecificLevel(new_place));
-            }
-            sportsManService.saveUser(sportsman);
-            Statistic statistic = new Statistic(sportsman, activity, energeticExpenditure);
-            sportsManService.saveStatistic(statistic);
-        }
-        activityService.saveActivity(activity);
+    public String closeEvent(@RequestParam(value = "id") Long id) {
+        activityService.closeActivity(activityService.getSpecificActivity(id));
         return "redirect:/events";
     }
 }

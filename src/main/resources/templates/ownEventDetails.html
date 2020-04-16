@@ -24,7 +24,7 @@
 -->
         <option th:each="sportsman : ${candidates}"
                 th:value="${sportsman.getId()}"
-                th:utext="${sportsman.getName()}">
+                th:utext="${sportsman.getFirstName()}">
         </option>
     </select>
     <span th:if="${activity.getOpen()}"><button class="btn btn-secondary" type="submit"
@@ -38,7 +38,7 @@
 <!--        <option value="" disabled selected> Remove Participant</option>-->
         <option th:each="sportsman : ${participants}"
                 th:value="${sportsman.getId()}"
-                th:utext="${sportsman.getName()}">
+                th:utext="${sportsman.getFirstName()}">
         </option>
     </select>
     <span th:if="${activity.getOpen()}"><button class="btn btn-secondary" type="submit"
