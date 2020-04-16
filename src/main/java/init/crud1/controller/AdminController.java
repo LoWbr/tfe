@@ -114,8 +114,16 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/updateType{id}", method = RequestMethod.POST)
-    public String createTopic(@RequestParam(value = "id") Long id, @ModelAttribute("activityTypeForm") ActivityTypeForm activityTypeForm) {
+    public String updateTopic(@RequestParam(value = "id") Long id, @ModelAttribute("activityTypeForm") ActivityTypeForm activityTypeForm) {
         ActivityType activityType = managementService.findSpecificActivityType(id);
+        activityType.update(activityTypeForm);
+        this.managementService.saveType(activityType);
+        return "redirect:/manageSportsSetting";
+    }
+
+    @RequestMapping(value = "/addType", method = RequestMethod.POST)
+    public String createTopic(@ModelAttribute("activityTypeForm") ActivityTypeForm activityTypeForm) {
+        ActivityType activityType = new ActivityType();
         activityType.update(activityTypeForm);
         this.managementService.saveType(activityType);
         return "redirect:/manageSportsSetting";
