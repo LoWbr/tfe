@@ -28,7 +28,7 @@ public class SportsManForm {
     private String mail;
 
     @NotBlank
-    @Size(min=8, max=10, message="Between 8 and 15")
+    @Size(min=8, max=60, message="Between 8 and 15")
     private String password;
 
     private String confirmPassword;
@@ -122,6 +122,7 @@ public class SportsManForm {
         this.mail = sportsMan.getEmail();
         this.weight = sportsMan.getWeight();
         this.dateofBirth = sportsMan.getDateOfBirth().toString();
+        this.password = sportsMan.getPassword();
     }
 
     ;

@@ -69,7 +69,7 @@
     </div>
             <div class="pure-u-1-2">
                 <label th:for="${sportsManForm}">Confirm Password</label>
-                <input class="pure-u-24-24" type="password"/>
+                <input class="pure-u-24-24" type="password" th:field="*{confirmPassword}"/>
                 <div>
                     <span class="text-danger" th:errors="*{confirmPassword}"> </span>
                 </div>

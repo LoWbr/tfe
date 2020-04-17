@@ -87,7 +87,7 @@ public class AdminController {
     @RequestMapping(value = "/promote{id}", method = RequestMethod.GET)
     public String promoteUser(@RequestParam(value = "id") Long id) {
         SportsMan sportsMan = sportsManService.findSpecificUser(id);
-        sportsMan.addRoles(sportsManService.findRole((long) 2));
+        sportsMan.addRoles(sportsManService.findConfirmedRole());
         sportsManService.saveUser(sportsMan);
         managementService.removeRequest(managementService.findSpecific(sportsMan));
         //Add notification!!

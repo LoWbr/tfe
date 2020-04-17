@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -207,6 +208,7 @@ public class SportsMan  {
         this.weight = sportsManForm.getWeight();
         this.points = 0;
         this.blocked = false;
+        this.roles = new ArrayList<>();
     }
 
     public void updateSportsMan(SportsManForm sportsManForm){

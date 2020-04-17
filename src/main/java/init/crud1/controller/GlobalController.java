@@ -28,12 +28,12 @@ public class GlobalController {
         return "signIn";
     }
 
-    @RequestMapping("/signUp")
+    /*@RequestMapping("/signUp")
     public String newUser(Model model) {
         SportsManForm sportsManForm = new SportsManForm();
         model.addAttribute("sportsManForm", sportsManForm);
         return "signUp";
-    }
+    }*/
 
     @RequestMapping("/contactUs")
     public String contactUs() {

@@ -13,7 +13,7 @@
     <div class="pure-u-1-8"></div>
 </div>
 <div sec:authorize="hasRole('SIMPLY')">
-    <p>You want to create and manage your OWNS events? </p><a th:href="@{/applyAsConfirmed}" >Click Here!</a>
+    <p>You want to create and manage your OWNS events? </p><a th:href="@{/applyAsConfirmedUser}" >Click Here!</a>
 </div>
 <div class="pure-g">
     <div class="pure-u-1-8"></div>
@@ -37,12 +37,12 @@
     <div class="pure-u-1-8"></div>
     <div class="pure-u-3-4">
         <div class="pure-g">
-        <div class="pure-u-1-2"><h3>Event Participé</h3></div>
-        <div class="pure-u-1-2"><h3>Event créé</h3></div>
+        <div class="pure-u-1-2"><h3>Events Créés</h3></div>
+        <div class="pure-u-1-2"><h3>Events enregistrés et/ou participés</h3></div>
         </div>
         <div class="pure-g">
-        <div class="pure-u-1-2"><a href="" th:text="${sportsMan.getCreatedActivities().size()}"></a></div>
-        <div class="pure-u-1-2"><a th:href="@{/getMakeEvent(id=${sportsMan.getId()})}" th:text="${sportsMan.getRegisteredActivities().size()}"> Title </a></div>
+        <div class="pure-u-1-2"><a th:href="@{/eventsByCreator}" th:text="${sportsMan.getCreatedActivities().size()}"></a></div>
+        <div class="pure-u-1-2"><a th:href="@{/getRegisteredEvents(id=${sportsMan.getId()})}" th:text="${sportsMan.getRegisteredActivities().size()}"> Title </a></div>
         </div>
     </div>
     <div class="pure-u-1-8"></div>
@@ -112,7 +112,7 @@
             <fieldset>
                 <legend>Remove Contact</legend>
                 <select class="pure-u-12-24" th:name="contact" multiple="multiple" size="1">
-                    <option th:each="user : ${contacts}"
+                    <option th:each="user : ${sportsMan.getContacts()}"
                             th:value="${user.getId()}"
                             th:utext="${user.getFirstName()}">
                     </option>

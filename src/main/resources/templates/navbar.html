@@ -9,7 +9,7 @@
         <li class="pure-menu-item"><a th:href="@{/contactUs}" class="pure-menu-link">Contact Us</a></li>
         <li class="pure-menu-item"><a th:href="@{/users}" class="pure-menu-link">Users</a></li>
         <li class="pure-menu-item"><a sec:authorize="hasAnyRole('ADMINISTRATOR','CONFIRMED','SIMPLY')" th:href="@{/user}" class="pure-menu-link">My Account</a></li>
-        <li class="pure-menu-item"><a sec:authorize="hasAnyRole('ADMINISTRATOR','CONFIRMED')" th:href="@{/ownEvents}" class="pure-menu-link">My Creations</a></li>
+        <li class="pure-menu-item"><a sec:authorize="hasAnyRole('ADMINISTRATOR','CONFIRMED')" th:href="@{/eventsByCreator}" class="pure-menu-link">My Creations</a></li>
         <li class="pure-menu-item"><a sec:authorize="hasAnyRole('ADMINISTRATOR','CONFIRMED')" th:href="@{/create}" class="pure-menu-link">Create Events</a></li>
         <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
             <a sec:authorize="hasRole('ADMINISTRATOR')" id="menuLink1" class="pure-menu-link">Manage...</a>

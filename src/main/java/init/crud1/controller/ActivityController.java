@@ -59,6 +59,13 @@ public class ActivityController {
         return "eventDetails";
     }
 
+    @RequestMapping(value = "/eventsByCreator", method = RequestMethod.GET)
+    public String getActivitiesByCreator(Model model, Principal principal) {
+        model.addAttribute("ownCreations",
+                activityService.getAllOfTheSameCreator(sportsManService.findCurrentUser(principal.getName())));
+        return "ownEvents";
+    }
+
     @RequestMapping(value = "/ownEvent{id}", method = RequestMethod.GET)
     public String ownEventDetails(@RequestParam Long id, Model model) {
         Activity activity = activityService.getSpecificActivity(id);

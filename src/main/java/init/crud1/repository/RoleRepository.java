@@ -15,7 +15,7 @@ public interface RoleRepository  extends CrudRepository<Role, Long> {
 
 
     @Query("Select role from Role role where role.id = :id")
-    Role findForPromotion(
+    Role find(
             @Param("id") Long id);
 
 }
