@@ -1,8 +1,17 @@
 package init.crud1.repository;
 
-import init.crud1.entity.News;
+import init.crud1.entity.*;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface NewsRepository extends CrudRepository<News, Long> {
 
+    @Query("Select news from News news where (:name is null or news.source.firstName = :name)" +
+            "and (:type is null or news.type = :type)")
+    List<News> filter(
+            @Param("name") String name,
+            @Param("type") NewsType newsType);
 }

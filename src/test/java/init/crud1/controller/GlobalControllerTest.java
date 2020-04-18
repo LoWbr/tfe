@@ -1,7 +1,7 @@
 package init.crud1.controller;
 
 import init.crud1.Crud1Application;
-import init.crud1.service.ActivityService;
+import init.crud1.service.*;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -20,38 +20,58 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
+@WebMvcTest
 @RunWith(SpringRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = Crud1Application.class)
 class GlobalControllerTest {
 
-    /*@Autowired
-    private MockMvc mockMvc;*/
+    @Autowired
+    MockMvc mockMvc;
+
+    @MockBean
+    private ActivityService activityService;
+    @MockBean
+    private SportsManService sportsManService;
+    @MockBean
+    private ManagementService managementService;
+    @MockBean
+    private CommentService commentService;
+    @MockBean
+    private NewsService newsService;
 
     @Test
     void getHome() throws Exception {
-        /*this.mockMvc.perform(get("/"))
+        this.mockMvc.perform(get("/"))
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(view().name("home"));*/
+                .andExpect(view().name("home"));
     }
 
     @Test
-    void signIn() {
+    void signIn() throws Exception {
+        this.mockMvc.perform(get("/signIn"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(view().name("signIn"));
     }
 
     @Test
-    void newUser() {
+    void contactUs() throws Exception {
+        this.mockMvc.perform(get("/contactUs"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(view().name("contactUs"));
     }
 
     @Test
-    void contactUs() {
+    void about() throws Exception {
+        this.mockMvc.perform(get("/about"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(view().name("about"));
     }
 
     @Test
-    void about() {
-    }
-
-    @Test
-    void search() {
+    void search() throws Exception {
+        this.mockMvc.perform(get("/search"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(view().name("search"))
+                .andExpect(model().size(4))
+                .andExpect(model().attributeExists("searchActivityForm","allKinds","allLevels","allEvents"));
     }
 }

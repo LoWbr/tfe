@@ -1,11 +1,10 @@
 package init.crud1.controller;
 
 import init.crud1.entity.*;
-import init.crud1.form.ActivityTypeForm;
-import init.crud1.form.LevelForm;
-import init.crud1.form.TopicForm;
+import init.crud1.form.*;
 import init.crud1.service.ActivityService;
 import init.crud1.service.ManagementService;
+import init.crud1.service.NewsService;
 import init.crud1.service.SportsManService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,13 +19,15 @@ public class AdminController {
     private ActivityService activityService;
     private SportsManService sportsManService;
     private ManagementService managementService;
+    private NewsService newsService;
 
     @Autowired
     public AdminController(ActivityService activityService, SportsManService sportsManService,
-                           ManagementService managementService) {
+                           ManagementService managementService, NewsService newsService) {
         this.activityService = activityService;
         this.sportsManService = sportsManService;
         this.managementService = managementService;
+        this.newsService = newsService;
     }
 
     @RequestMapping("/manageUsers")
@@ -141,6 +142,24 @@ public class AdminController {
         level.update(levelForm);
         this.managementService.saveLevel(level);
         return "redirect:/manageLevelsSetting";
+    }
+
+    @RequestMapping(value = "/history")
+    public String getHistory(@ModelAttribute("searchNewForm") SearchNewForm searchNewForm,
+                             Model model, @RequestParam(required = false) Boolean there) {
+        model.addAttribute("allTypes", newsService.getAllNewsType());
+        if(there != null){
+            System.out.println(searchNewForm.getNameSportsman());
+            System.out.println(searchNewForm.getNewsType().name());
+            model.addAttribute("allActs",newsService.findForSearch(searchNewForm));
+            model.addAttribute("searchActivityForm",searchNewForm);
+            return "searchNew";
+        }
+        else{
+            model.addAttribute("allActs",newsService.findAll());
+            model.addAttribute("searchActivityForm",searchNewForm);
+            return "searchNew";
+        }
     }
 
 }

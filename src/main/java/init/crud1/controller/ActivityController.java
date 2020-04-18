@@ -27,7 +27,7 @@ public class ActivityController {
 
     @RequestMapping(value ="/events", method = RequestMethod.GET)
     public String getAllEvents(Model model) {
-        model.addAttribute("create", activityService.getAllActivities());
+        model.addAttribute("allActivities", activityService.getAllActivities());
         return "events";
     }
 
