@@ -21,17 +21,20 @@ public class SportsManService {
     RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
     ManagementService managementService;
+    NewsService newsService;
 
     @Autowired
     public SportsManService(SportsManRepository sportsManRepository, StatisticRepository statisticRepository,
                             LevelRepository levelRepository, RoleRepository roleRepository,
-                            ManagementService managementService, PasswordEncoder passwordEncoder) {
+                            ManagementService managementService, PasswordEncoder passwordEncoder,
+                            NewsService newsService) {
         this.sportsManRepository = sportsManRepository;
         this.statisticRepository = statisticRepository;
         this.levelRepository = levelRepository;
         this.roleRepository = roleRepository;
         this.managementService = managementService;
         this.passwordEncoder = passwordEncoder;
+        this.newsService = newsService;
     }
 
     //FindCurrentUser
@@ -94,13 +97,15 @@ public class SportsManService {
         PromotionRequest promotionRequest = new PromotionRequest(sportsMan,findConfirmedRole());
         managementService.saveRequest(promotionRequest);
         //Créer une notification pour l'administrateur
-        for (SportsMan user: selectAuthorityUsers()) {
+        newsService.returnApplicationNew(sportsMan,NewsType.APPLY_AS_CONFIRMED);
+        /*for (SportsMan user: selectAuthorityUsers()) {
             News news = new News(user,sportsMan,null,NewsType.APPLY_AS_CONFIRMED,false);
             this.managementService.saveNews(news);
-        }
+        }*/
+
     }
 
-    private Iterable<SportsMan> selectAuthorityUsers() {
+    public Iterable<SportsMan> selectAuthorityUsers() {
         return this.sportsManRepository.selectAuthorityUsers(findAdministrator());
     }
 

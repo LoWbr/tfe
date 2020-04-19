@@ -70,7 +70,7 @@ public class AdminController {
             activityService.saveActivity(activity);
         }
         sportsManService.saveUser(sportsMan);
-        return "redirect:/manage";
+        return "redirect:/manageUsers";
     }
 
     @RequestMapping(value = "/user/unblock{id}", method = RequestMethod.GET)
@@ -82,7 +82,15 @@ public class AdminController {
             activityService.saveActivity(activity);
         }
         sportsManService.saveUser(sportsMan);
-        return "redirect:/manage";
+        return "redirect:/manageUsers";
+    }
+
+    @RequestMapping(value = "/refusePromotion{id}", method = RequestMethod.GET)
+    public String refusePromotionUser(@RequestParam(value = "id") Long id) {
+        SportsMan sportsMan = sportsManService.findSpecificUser(id);
+        managementService.removeRequest(managementService.findSpecific(sportsMan));
+        newsService.makeNews(NewsType.NEGATIVE_REQUEST, sportsMan, null);
+        return "redirect:/manageUsers";
     }
 
     @RequestMapping(value = "/promote{id}", method = RequestMethod.GET)
@@ -91,8 +99,9 @@ public class AdminController {
         sportsMan.addRoles(sportsManService.findConfirmedRole());
         sportsManService.saveUser(sportsMan);
         managementService.removeRequest(managementService.findSpecific(sportsMan));
+        newsService.makeNews(NewsType.VALIDATED_REQUEST, sportsMan, null);
         //Add notification!!
-        return "redirect:/manage";
+        return "redirect:/manageUsers";
     }
 
     @RequestMapping(value = "/addTopic", method = RequestMethod.POST)

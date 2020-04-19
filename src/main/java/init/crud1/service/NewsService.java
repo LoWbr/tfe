@@ -1,14 +1,12 @@
 package init.crud1.service;
 
-import init.crud1.entity.News;
-import init.crud1.entity.NewsType;
-import init.crud1.entity.PromotionRequest;
-import init.crud1.entity.SportsMan;
+import init.crud1.entity.*;
 import init.crud1.form.SearchActivityForm;
 import init.crud1.form.SearchNewForm;
 import init.crud1.repository.NewsRepository;
 import init.crud1.repository.PromotionRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,17 +17,22 @@ public class NewsService {
 
     private NewsRepository newsRepository;
     private PromotionRequestRepository promotionRequestRepository;
+    private AdminService adminService;
 
     @Autowired
-    public NewsService(NewsRepository newsRepository, PromotionRequestRepository promotionRequestRepository) {
+    public NewsService(NewsRepository newsRepository, PromotionRequestRepository promotionRequestRepository,
+                       AdminService adminService) {
         this.newsRepository = newsRepository;
         this.promotionRequestRepository = promotionRequestRepository;
+        this.adminService = adminService;
     }
 
+    //!!! Pas fonctionnel, à corriger
     public List<News> findForSearch(SearchNewForm searchNewForm){
         return this.newsRepository.filter(searchNewForm.getNameSportsman(), searchNewForm.getNewsType());
     }
 
+    // All Kinds : OK
     public List<NewsType> getAllNewsType(){
         List<NewsType> allTypes = new ArrayList<>();
         for (NewsType newsType:NewsType.values()) {
@@ -37,8 +40,90 @@ public class NewsService {
         }
         return allTypes;
     }
-
+    // All : OK
     public Iterable<News> findAll(){
         return this.newsRepository.findAll();
     }
+
+    // Save
+    public void saveNew(News news){
+        this.newsRepository.save(news);
+    }
+
+    // La globale : point d'entrée des autres services
+    // Arguments : target, source, type, event (optionnel)
+    public void makeNews(NewsType newsType, @Nullable SportsMan targetOrSource, @Nullable Activity activity){
+        switch (newsType.name()){
+            case "APPLY_AS_CONFIRMED":
+                this.returnApplicationNew(targetOrSource, newsType);
+                break;
+            case "VALIDATED_REQUEST":
+            case "NEGATIVE_REQUEST":
+            case "LEVEL_UP":
+                this.returnApplicationResultNewOrLevelUpNew(targetOrSource, newsType);
+                break;
+            case "CANCELLED_EVENT":
+            case "DONE_EVENT":
+                this.returnCancelledApplictionNewOrCloseEventNew(activity, newsType);
+                break;
+            case "REFUSED_REGISTRATION":
+            case "VALIDED_REGISTRATION":
+                this.returnRegistrationResultNew(targetOrSource, activity, newsType);
+                break;
+            case "COMMENTED_EVENT":
+                this.returnCommentEventNew(targetOrSource, activity, newsType);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void returnApplicationNew(SportsMan sportsMan, NewsType newsType){
+        for (SportsMan administrator :adminService.selectAuthorityUsers()) {
+            News supplyToAdmin = new News(administrator,sportsMan,null, newsType, false);
+            this.saveNew(supplyToAdmin);
+        }
+
+    }
+
+    private void returnApplicationResultNewOrLevelUpNew(SportsMan sportsMan, NewsType newsType){
+        if(newsType.name().equals("VALIDATED_REQUEST")||newsType.name().equals("NEGATIVE_REQUEST")){
+            News answerToAdmin = new News(sportsMan,null,null,newsType, false);
+            this.saveNew(answerToAdmin);
+        }
+        else {
+            News announceLevelUp = new News(sportsMan,null,null,newsType, false);
+            this.saveNew(announceLevelUp);
+        }
+    }
+
+    private void returnCancelledApplictionNewOrCloseEventNew(Activity activity, NewsType newsType){
+        if(newsType.name().equals("CANCELLED_EVENT")){
+            News announceToCreator = new News(activity.getCreator(), null, activity, newsType, false);
+            this.saveNew(announceToCreator);
+            for (SportsMan registered : activity.getRegistered()) {
+                News announceToRegistered = new News(registered, null, activity, newsType, false);
+                this.saveNew(announceToRegistered);
+            }
+        }
+        else{
+            for (SportsMan registered : activity.getRegistered()) {
+                News announceToRegistered = new News(registered, null, activity, newsType, false);
+                this.saveNew(announceToRegistered);
+            }
+        }
+    }
+
+    private void returnRegistrationResultNew(SportsMan sportsMan, Activity activity, NewsType newsType){
+            News answerToBuyer = new News(sportsMan, activity.getCreator(),activity,newsType, false);
+            this.saveNew(answerToBuyer);
+    }
+
+
+    private void returnCommentEventNew(SportsMan sportsMan, Activity activity, NewsType newsType){
+        News announceToCreator = new News(activity.getCreator(),sportsMan,activity,newsType, false);
+        this.saveNew(announceToCreator);
+    }
+
+
 }

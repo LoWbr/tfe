@@ -1,5 +1,7 @@
 package init.crud1.entity;
 
+import com.sun.istack.Nullable;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,15 +13,15 @@ public class News{
     private Long id;
 
     @OneToOne
-    @JoinColumn(name="sportsManTarget", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name="sportsManTarget", referencedColumnName = "id")
     private SportsMan target;
 
     @OneToOne
-    @JoinColumn(name="sportsManSource", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name="sportsManSource", referencedColumnName = "id")
     private SportsMan source;
 
     @OneToOne
-    @JoinColumn(name="concernedActivity", referencedColumnName = "id", nullable = true)
+    @JoinColumn(name="concernedActivity", referencedColumnName = "id")
     private Activity activity;
 
     @Enumerated(EnumType.STRING)
