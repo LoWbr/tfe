@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -18,29 +19,22 @@ public class GlobalController {
     @Autowired
     ActivityService activityService;
 
-    @RequestMapping("/")
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getHome() {
         return "home";
     }
 
-    @RequestMapping("/signIn")
+    @RequestMapping(value = "/signIn", method = RequestMethod.GET)
     public String signIn() {
         return "signIn";
     }
 
-    /*@RequestMapping("/signUp")
-    public String newUser(Model model) {
-        SportsManForm sportsManForm = new SportsManForm();
-        model.addAttribute("sportsManForm", sportsManForm);
-        return "signUp";
-    }*/
-
-    @RequestMapping("/contactUs")
+    @RequestMapping(value = "/contactUs", method = RequestMethod.GET)
     public String contactUs() {
         return "contactUs";
     }
 
-    @RequestMapping("/about")
+    @RequestMapping(value = "/about", method = RequestMethod.GET)
     public String about() {
         return "about";
     }
