@@ -18,19 +18,21 @@ public class ActivityService {
     StatisticRepository statisticRepository;
     CommentRepository commentRepository;
     LevelRepository levelRepository;
-
+    NewsService newsService;
     SportsManService sportsManService;
 
     @Autowired
     public ActivityService(ActivityRepository activityRepository, ActivityTypeRepository activityTypeRepository,
                            StatisticRepository statisticRepository, CommentRepository commentRepository,
-                           LevelRepository levelRepository, SportsManService sportsManService) {
+                           LevelRepository levelRepository, SportsManService sportsManService,
+                           NewsService newsService) {
         this.activityRepository = activityRepository;
         this.activityTypeRepository = activityTypeRepository;
         this.statisticRepository = statisticRepository;
         this.commentRepository = commentRepository;
         this.levelRepository = levelRepository;
         this.sportsManService = sportsManService;
+        this.newsService = newsService;
     }
 
     //----ACTIVITY, QUERIES----//
@@ -75,6 +77,13 @@ public class ActivityService {
     //AddSportsManCandidate
     public void applyAsCandidate(Activity activity, SportsMan sportsMan){
         activity.getCandidate().add(sportsMan);
+        this.newsService.returnApplicationEventNew(activity, sportsMan, NewsType.APPLY_FOR_EVENT);
+        this.saveActivity(activity);
+    }
+
+    public void refuseBuyer(Activity activity, SportsMan sportsMan) {
+        activity.getCandidate().remove(sportsMan);
+        this.newsService.returnRegistrationResultNew(sportsMan, activity,NewsType.REFUSED_REGISTRATION);
         this.saveActivity(activity);
     }
 
@@ -83,9 +92,12 @@ public class ActivityService {
         if(flag){
             activity.addParticipant(sportsMan);
             activity.getCandidate().remove(sportsMan);
+            this.newsService.returnRegistrationResultNew(sportsMan, activity,NewsType.VALIDED_REGISTRATION);
+            //Rajouter activity et creator
         }
         else{
             activity.removeParticipant(sportsMan);
+            this.newsService.returnRegistrationResultNew(sportsMan, activity,NewsType.CANCEL_REGISTRATION);
         }
         this.saveActivity(activity);
     }
@@ -93,11 +105,13 @@ public class ActivityService {
     //Close Activity
     public void closeActivity(Activity activity) {
         activity.closeEvent();
+        newsService.returnCancelledApplictionNewOrCloseEventNew(activity,NewsType.DONE_EVENT);
         for (SportsMan sportsman : activity.getRegistered()) {
             double durationInHours = (double) activity.getDuration() / 60;
             Integer energeticExpenditure = Math.toIntExact(Math.round(sportsman.getWeight() * durationInHours * activity.getActivity().getMet()));
             sportsman.setPoints(energeticExpenditure);
             if (sportsman.checkLevelStatus()){
+                newsService.returnApplicationResultNewOrLevelUpNew(sportsman,NewsType.LEVEL_UP);
                 Long new_place = sportsman.getLevel().getPlace()+1;
                 sportsman.setLevel(sportsManService.findSpecificLevel(new_place));
             }
@@ -128,7 +142,5 @@ public class ActivityService {
     public Iterable<Comment> findCommentsForActivity(Activity activity){
         return this.commentRepository.findForEvent(activity);
     }
-
-
 
 }

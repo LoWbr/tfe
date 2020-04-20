@@ -57,6 +57,9 @@ public class NewsService {
             case "APPLY_AS_CONFIRMED":
                 this.returnApplicationNew(targetOrSource, newsType);
                 break;
+            case "APPLY_FOR_EVENT":
+                this.returnApplicationEventNew(activity, targetOrSource, newsType);
+                break;
             case "VALIDATED_REQUEST":
             case "NEGATIVE_REQUEST":
             case "LEVEL_UP":
@@ -67,6 +70,7 @@ public class NewsService {
                 this.returnCancelledApplictionNewOrCloseEventNew(activity, newsType);
                 break;
             case "REFUSED_REGISTRATION":
+            case "CANCEL_REGISTRATION":
             case "VALIDED_REGISTRATION":
                 this.returnRegistrationResultNew(targetOrSource, activity, newsType);
                 break;
@@ -78,6 +82,11 @@ public class NewsService {
         }
     }
 
+    public void returnApplicationEventNew(Activity activity, SportsMan sportsMan, NewsType newsType) {
+        News supplyToCreator = new News(activity.getCreator(),sportsMan,activity, newsType, false);
+        this.saveNew(supplyToCreator);
+    }
+
     public void returnApplicationNew(SportsMan sportsMan, NewsType newsType){
         for (SportsMan administrator :adminService.selectAuthorityUsers()) {
             News supplyToAdmin = new News(administrator,sportsMan,null, newsType, false);
@@ -86,7 +95,7 @@ public class NewsService {
 
     }
 
-    private void returnApplicationResultNewOrLevelUpNew(SportsMan sportsMan, NewsType newsType){
+    public void returnApplicationResultNewOrLevelUpNew(SportsMan sportsMan, NewsType newsType){
         if(newsType.name().equals("VALIDATED_REQUEST")||newsType.name().equals("NEGATIVE_REQUEST")){
             News answerToAdmin = new News(sportsMan,null,null,newsType, false);
             this.saveNew(answerToAdmin);
@@ -97,7 +106,7 @@ public class NewsService {
         }
     }
 
-    private void returnCancelledApplictionNewOrCloseEventNew(Activity activity, NewsType newsType){
+    public void returnCancelledApplictionNewOrCloseEventNew(Activity activity, NewsType newsType){
         if(newsType.name().equals("CANCELLED_EVENT")){
             News announceToCreator = new News(activity.getCreator(), null, activity, newsType, false);
             this.saveNew(announceToCreator);
@@ -108,19 +117,19 @@ public class NewsService {
         }
         else{
             for (SportsMan registered : activity.getRegistered()) {
-                News announceToRegistered = new News(registered, null, activity, newsType, false);
+                News announceToRegistered = new News(registered, activity.getCreator(), activity, newsType, false);
                 this.saveNew(announceToRegistered);
             }
         }
     }
 
-    private void returnRegistrationResultNew(SportsMan sportsMan, Activity activity, NewsType newsType){
+    public void returnRegistrationResultNew(SportsMan sportsMan, Activity activity, NewsType newsType){
             News answerToBuyer = new News(sportsMan, activity.getCreator(),activity,newsType, false);
             this.saveNew(answerToBuyer);
     }
 
 
-    private void returnCommentEventNew(SportsMan sportsMan, Activity activity, NewsType newsType){
+    public void returnCommentEventNew(SportsMan sportsMan, Activity activity, NewsType newsType){
         News announceToCreator = new News(activity.getCreator(),sportsMan,activity,newsType, false);
         this.saveNew(announceToCreator);
     }

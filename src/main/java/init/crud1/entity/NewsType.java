@@ -1,9 +1,10 @@
 package init.crud1.entity;
 
 public enum NewsType {
-
+    APPLY_FOR_EVENT,
     VALIDED_REGISTRATION,
     REFUSED_REGISTRATION,
+    CANCEL_REGISTRATION,
     CANCELLED_EVENT,
     DONE_EVENT,
     LEVEL_UP,

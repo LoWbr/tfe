@@ -18,7 +18,7 @@ INSERT INTO level (name, place, maximum_threshold, ratio_points) VALUES
 ('Hero',5,600,0.3);
 
 INSERT INTO sports_man (first_name,last_name,description,date_of_birth,weight,points,email,password, level) VALUES
-('Laurent','Weber','Chevelu Sportif','1990-05-29',79,50,'lo@gmail.com','$2y$10$e/M4T66Ioz3rZ0fltX7qpeLzonDbP/sD60zehJ77t0SoJUCF.WGMa',1),
+('Laurent','Weber','Chevelu Sportif','1990-05-29',79,35,'lo@gmail.com','$2y$10$e/M4T66Ioz3rZ0fltX7qpeLzonDbP/sD60zehJ77t0SoJUCF.WGMa',1),
 ('Michael','Atlas','Photograhe en tout genre','1988-04-01',90,32,'mike@gmail.com','$2y$10$0w8iBx3F0.9N9x5eGgy73eqhkDRcKXGnoZQyqvFZ9KC0XEeyHRi0K',1),
 ('Geoffrey','Moyens','Militaire et Patate Mariée','1983-02-02',95,40,'geof@gmail.com','$2y$10$4g0uGcj7IjljDWoCY5e8X.T2GbVP2e/RPs65.MbUvYECccKlJiQqW',1),
 ('Romain','Monsterlet','Militaire et Patate Mariée','1990-12-06',83,84,'ro@gmail.com','$2y$10$FbazGLhM/vvjhS8ykF5neu58q9cdQB02b1DVVdPfHY47S6zoAw3US',1),

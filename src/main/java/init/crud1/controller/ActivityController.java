@@ -98,6 +98,14 @@ public class ActivityController {
         return "redirect:/events";
     }
 
+    @RequestMapping(value = "/refuseUser{id}", method = RequestMethod.POST)
+    public String refuseUser(@RequestParam(value = "candidate") Long idParticipant,
+                          @RequestParam(value = "id") Long idActivity) {
+        activityService.refuseBuyer(activityService.getSpecificActivity(idActivity),
+                sportsManService.findSpecificUser(idParticipant));
+        return "redirect:/events";
+    }
+
     @RequestMapping(value = "/addUser{id}", method = RequestMethod.POST)
     public String addUser(@RequestParam(value = "candidate") Long idParticipant,
                           @RequestParam(value = "id") Long idActivity) {

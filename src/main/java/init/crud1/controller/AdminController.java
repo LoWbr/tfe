@@ -50,7 +50,8 @@ public class AdminController {
         Activity activity = activityService.getSpecificActivity(id);
         activity.setOpen(false);
         activityService.saveActivity(activity);
-        return "redirect:/manage";
+        newsService.returnCancelledApplictionNewOrCloseEventNew(activity, NewsType.CANCELLED_EVENT);
+        return "redirect:/manageEvents";
     }
 
     @RequestMapping(value = "/open{id}", method = RequestMethod.GET)
@@ -58,7 +59,7 @@ public class AdminController {
         Activity activity = activityService.getSpecificActivity(id);
         activity.setOpen(true);
         activityService.saveActivity(activity);
-        return "redirect:/manage";
+        return "redirect:/manageEvents";
     }
 
     @RequestMapping(value = "/user/block{id}", method = RequestMethod.GET)
