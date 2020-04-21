@@ -1,180 +1,187 @@
 package init.crud1.service;
 
-import init.crud1.entity.*;
-import init.crud1.form.ActivityForm;
-import init.crud1.form.CommentForm;
-import init.crud1.form.SearchActivityForm;
-import init.crud1.repository.*;
-import init.crud1.repository.AddressRepository;
+import java.text.ParseException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.util.List;
+import init.crud1.entity.Activity;
+import init.crud1.entity.ActivityType;
+import init.crud1.entity.Address;
+import init.crud1.entity.Comment;
+import init.crud1.entity.Level;
+import init.crud1.entity.NewsType;
+import init.crud1.entity.SportsMan;
+import init.crud1.entity.Statistic;
+import init.crud1.form.ActivityForm;
+import init.crud1.form.CommentForm;
+import init.crud1.form.SearchActivityForm;
+import init.crud1.repository.ActivityRepository;
+import init.crud1.repository.ActivityTypeRepository;
+import init.crud1.repository.AddressRepository;
+import init.crud1.repository.CommentRepository;
+import init.crud1.repository.LevelRepository;
+import init.crud1.repository.StatisticRepository;
 
 @Service
 public class ActivityService {
 
-    ActivityRepository activityRepository;
-    ActivityTypeRepository activityTypeRepository;
-    StatisticRepository statisticRepository;
-    CommentRepository commentRepository;
-    LevelRepository levelRepository;
-    AddressRepository addressRepository;
-    NewsService newsService;
-    SportsManService sportsManService;
+	ActivityRepository activityRepository;
+	ActivityTypeRepository activityTypeRepository;
+	StatisticRepository statisticRepository;
+	CommentRepository commentRepository;
+	LevelRepository levelRepository;
+	AddressRepository addressRepository;
+	NewsService newsService;
+	SportsManService sportsManService;
 
-    @Autowired
-    public ActivityService(ActivityRepository activityRepository, ActivityTypeRepository activityTypeRepository,
-                           StatisticRepository statisticRepository, CommentRepository commentRepository,
-                           LevelRepository levelRepository, SportsManService sportsManService,
-                           AddressRepository addressRepository, NewsService newsService) {
-        this.activityRepository = activityRepository;
-        this.activityTypeRepository = activityTypeRepository;
-        this.statisticRepository = statisticRepository;
-        this.commentRepository = commentRepository;
-        this.levelRepository = levelRepository;
-        this.sportsManService = sportsManService;
-        this.addressRepository = addressRepository;
-        this.newsService = newsService;
-    }
+	@Autowired
+	public ActivityService(ActivityRepository activityRepository, ActivityTypeRepository activityTypeRepository,
+			StatisticRepository statisticRepository, CommentRepository commentRepository,
+			LevelRepository levelRepository, SportsManService sportsManService,
+			AddressRepository addressRepository, NewsService newsService) {
+		this.activityRepository = activityRepository;
+		this.activityTypeRepository = activityTypeRepository;
+		this.statisticRepository = statisticRepository;
+		this.commentRepository = commentRepository;
+		this.levelRepository = levelRepository;
+		this.sportsManService = sportsManService;
+		this.addressRepository = addressRepository;
+		this.newsService = newsService;
+	}
 
-    //----ACTIVITY, QUERIES----//
+	//----ACTIVITY, QUERIES----//
 
-    //AllEvents
-    public Iterable<Activity> getAllActivities(){
-        return this.activityRepository.findAll();
-    }
+	//AllEvents
+	public Iterable<Activity> getAllActivities(){
+		return this.activityRepository.findAll();
+	}
 
-    //FindSpecificEvent
-    public Activity getSpecificActivity(Long id){
-        return this.activityRepository.findSpecific(id);
-    }
+	//FindSpecificEvent
+	public Activity getSpecificActivity(Long id){
+		return this.activityRepository.findSpecific(id);
+	}
 
-    //FindByCreator
-    public List<Activity> getAllOfTheSameCreator(SportsMan sportsMan){
-        return this.activityRepository.findByCreator(sportsMan);
-    }
+	//FindByCreator
+	public List<Activity> getAllOfTheSameCreator(SportsMan sportsMan){
+		return this.activityRepository.findByCreator(sportsMan);
+	}
 
-    //FindForSearch
-    public List<Activity> findForSearch(SearchActivityForm searchActivityForm){
-        return this.activityRepository.filter(searchActivityForm.getActivity(), searchActivityForm.getMinimumLevel());
-    }
+	//FindForSearch
+	public List<Activity> findForSearch(SearchActivityForm searchActivityForm){
+		return this.activityRepository.filter(searchActivityForm.getActivity(), searchActivityForm.getMinimumLevel());
+	}
 
-    //SaveEvent
-    public void saveActivity(Activity activity){
-        this.activityRepository.save(activity);
-    }
+	//SaveEvent
+	public void saveActivity(Activity activity){
+		this.activityRepository.save(activity);
+	}
 
-    //CreateEvent
-    public void createActivity(ActivityForm activityForm, SportsMan sportsMan, Address address) throws ParseException {
-        Activity activity = new Activity(activityForm, sportsMan, address);
-        this.saveActivity(activity);
-    }
+	//CreateEvent
+	public void createActivity(ActivityForm activityForm, SportsMan sportsMan, Address address) throws ParseException {
+		Activity activity = new Activity(activityForm, sportsMan, address);
+		this.saveActivity(activity);
+	}
 
-    //UpdateEvent
-    public void updateActivity(Activity activity, ActivityForm activityForm){
-        Address address = this.addressRepository.findSpecific(activity.getAddress().getId());
-        address.update(activityForm);
-        addressRepository.save(address);
-        activity.update(activityForm, address);
-        this.saveActivity(activity);
-    }
+	//UpdateEvent
+	public void updateActivity(Activity activity, ActivityForm activityForm){
+		Address address = this.addressRepository.findSpecific(activity.getAddress().getId());
+		address.update(activityForm);
+		addressRepository.save(address);
+		activity.update(activityForm, address);
+		this.saveActivity(activity);
+	}
 
-    //AddSportsManCandidate
-    public void applyAsCandidate(Activity activity, SportsMan sportsMan){
-        activity.getCandidate().add(sportsMan);
-        this.newsService.returnApplicationEventNew(activity, sportsMan, NewsType.APPLY_FOR_EVENT);
-        this.saveActivity(activity);
-    }
+	//AddSportsManCandidate
+	public void applyAsCandidate(Activity activity, SportsMan sportsMan){
+		activity.getCandidate().add(sportsMan);
+		this.newsService.returnApplicationEventNew(activity, sportsMan, NewsType.APPLY_FOR_EVENT);
+		this.saveActivity(activity);
+	}
 
-    public void refuseBuyer(Activity activity, SportsMan sportsMan) {
-        activity.getCandidate().remove(sportsMan);
-        this.newsService.returnRegistrationResultNew(sportsMan, activity,NewsType.REFUSED_REGISTRATION);
-        this.saveActivity(activity);
-    }
+	public void refuseBuyer(Activity activity, SportsMan sportsMan) {
+		activity.getCandidate().remove(sportsMan);
+		this.newsService.returnRegistrationResultNew(sportsMan, activity,NewsType.REFUSED_REGISTRATION);
+		this.saveActivity(activity);
+	}
 
-    //ManagingParticipants
-    public void addOrRemoveParticipants(Activity activity, SportsMan sportsMan, boolean flag){
-        if(flag){
-            activity.addParticipant(sportsMan);
-            activity.getCandidate().remove(sportsMan);
-            this.newsService.returnRegistrationResultNew(sportsMan, activity,NewsType.VALIDED_REGISTRATION);
-            //Rajouter activity et creator
-        }
-        else{
-            activity.removeParticipant(sportsMan);
-            this.newsService.returnRegistrationResultNew(sportsMan, activity,NewsType.CANCEL_REGISTRATION);
-        }
-        this.saveActivity(activity);
-    }
+	//ManagingParticipants
+	public void addOrRemoveParticipants(Activity activity, SportsMan sportsMan, boolean flag){
+		if(flag){
+			activity.addParticipant(sportsMan);
+			activity.getCandidate().remove(sportsMan);
+			this.newsService.returnRegistrationResultNew(sportsMan, activity,NewsType.VALIDED_REGISTRATION);
+			//Rajouter activity et creator
+		}
+		else{
+			activity.removeParticipant(sportsMan);
+			this.newsService.returnRegistrationResultNew(sportsMan, activity,NewsType.CANCEL_REGISTRATION);
+		}
+		this.saveActivity(activity);
+	}
 
-    //Close Activity
-    public void closeActivity(Activity activity) {
-        activity.closeEvent();
-        newsService.returnCancelledApplictionNewOrCloseEventNew(activity,NewsType.DONE_EVENT);
-        for (SportsMan sportsman : activity.getRegistered()) {
-            double durationInHours = (double) activity.getDuration() / 60;
-            Integer energeticExpenditure = Math.toIntExact(Math.round(sportsman.getWeight() * durationInHours * activity.getActivity().getMet()));
-            sportsman.setPoints(energeticExpenditure);
-            if (sportsman.checkLevelStatus()){
-                newsService.returnApplicationResultNewOrLevelUpNew(sportsman,NewsType.LEVEL_UP);
-                Long new_place = sportsman.getLevel().getPlace()+1;
-                sportsman.setLevel(sportsManService.findSpecificLevel(new_place));
-            }
-            sportsManService.saveUser(sportsman);
-            Statistic statistic = new Statistic(sportsman, activity, energeticExpenditure);
-            sportsManService.saveStatistic(statistic);
-        }
-        this.saveActivity(activity);
-    }
+	//Close Activity
+	public void closeActivity(Activity activity) {
+		activity.closeEvent();
+		newsService.returnCancelledApplictionNewOrCloseEventNew(activity,NewsType.DONE_EVENT);
+		for (SportsMan sportsman : activity.getRegistered()) {
+			double durationInHours = (double) activity.getDuration() / 60;
+			Integer energeticExpenditure = Math.toIntExact(Math.round(sportsman.getWeight() * durationInHours * activity.getActivity().getMet()));
+			sportsman.setPoints(energeticExpenditure);
+			if (sportsman.checkLevelStatus()){
+				newsService.returnApplicationResultNewOrLevelUpNew(sportsman,NewsType.LEVEL_UP);
+				Long new_place = sportsman.getLevel().getPlace()+1;
+				sportsman.setLevel(sportsManService.findSpecificLevel(new_place));
+			}
+			sportsManService.saveUser(sportsman);
+			Statistic statistic = new Statistic(sportsman, activity, energeticExpenditure);
+			sportsManService.saveStatistic(statistic);
+		}
+		this.saveActivity(activity);
+	}
 
-    //SaveComment
-    public CommentForm initiateCommentForm(Activity activity, SportsMan sportsMan){
-        CommentForm commentForm = new CommentForm(sportsMan, activity);
-        return commentForm;
-    }
+	//SaveComment
+	public CommentForm initiateCommentForm(Activity activity, SportsMan sportsMan){
+		CommentForm commentForm = new CommentForm(sportsMan, activity);
+		return commentForm;
+	}
 
-    //SaveComment
-    public void createComment(Comment comment){
-        this.commentRepository.save(comment);
-    }
-
-
-
-    public void cancelOrActivateActivity(Activity activity, boolean status){
-        if(status){
-            activity.setOpen(status);
-            this.saveActivity(activity);
-        }
-        else{
-            activity.setOpen(status);
-            this.saveActivity(activity);
-        }
-
-    }
-
-
-    //AllActivityKinds
-    public Iterable<ActivityType> getAllActivityTypes(){
-        return this.activityTypeRepository.findAll();
-    }
-
-    //AllLevels
-    public Iterable<Level> getAllLevels(){
-        return this.levelRepository.findAll();
-    }
+	//SaveComment
+	public void createComment(Comment comment){
+		this.commentRepository.save(comment);
+	}
 
 
 
-    //FindCommentForActivity
-    public Iterable<Comment> findCommentsForActivity(Activity activity){
-        return this.commentRepository.findForEvent(activity);
-    }
+	public void cancelOrActivateActivity(Activity activity, boolean status){
 
-    public Address createAddress(ActivityForm activityForm) {
-        Address address = new Address(activityForm);
-        this.addressRepository.save(address);
-        return address;
-    }
+		activity.setOpen(status);
+		this.saveActivity(activity);
+
+	}
+
+
+	//AllActivityKinds
+	public Iterable<ActivityType> getAllActivityTypes(){
+		return this.activityTypeRepository.findAll();
+	}
+
+	//AllLevels
+	public Iterable<Level> getAllLevels(){
+		return this.levelRepository.findAll();
+	}
+
+
+
+	//FindCommentForActivity
+	public Iterable<Comment> findCommentsForActivity(Activity activity){
+		return this.commentRepository.findForEvent(activity);
+	}
+
+	public Address createAddress(ActivityForm activityForm) {
+		Address address = new Address(activityForm);
+		this.addressRepository.save(address);
+		return address;
+	}
 }
