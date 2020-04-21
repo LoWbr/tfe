@@ -84,8 +84,6 @@ public class SportsManController {
         if(bindingResult.hasErrors()){
             return "user";
         }
-        /*SportsMan sportsMan = sportsManService.findCurrentUser(principal.getName());
-        sportsMan.updateSportsMan(sportsManForm);*/
         sportsManService.updateUser(sportsManService.findCurrentUser(principal.getName()), sportsManForm);
         return "users";
     }

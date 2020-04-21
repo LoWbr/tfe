@@ -32,4 +32,9 @@ public class CommentForm {
     public void setActivity(Activity activity) {
         this.activity = activity;
     }
+
+    public CommentForm(SportsMan author, Activity activity) {
+        this.author = author;
+        this.activity = activity;
+    }
 }

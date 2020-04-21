@@ -96,14 +96,21 @@ public class SportsManService {
     public void applyForConfirmedRole(SportsMan sportsMan){
         PromotionRequest promotionRequest = new PromotionRequest(sportsMan,findConfirmedRole());
         managementService.saveRequest(promotionRequest);
-        //Créer une notification pour l'administrateur
         newsService.returnApplicationNew(sportsMan,NewsType.APPLY_AS_CONFIRMED);
-        /*for (SportsMan user: selectAuthorityUsers()) {
-            News news = new News(user,sportsMan,null,NewsType.APPLY_AS_CONFIRMED,false);
-            this.managementService.saveNews(news);
-        }*/
-
     }
+
+
+    public void blockOrUnblock(SportsMan sportsMan, boolean status){
+        if(status){
+            sportsMan.setBlocked(status);
+            this.saveUser(sportsMan);
+        }
+        else{
+            sportsMan.setBlocked(status);
+            this.saveUser(sportsMan);
+        }
+    }
+
 
     public Iterable<SportsMan> selectAuthorityUsers() {
         return this.sportsManRepository.selectAuthorityUsers(findAdministrator());
@@ -132,6 +139,11 @@ public class SportsManService {
 
     public void updateUser(SportsMan sportsMan, SportsManForm sportsManForm){
         sportsMan.updateSportsMan(sportsManForm);
+        this.saveUser(sportsMan);
+    }
+
+    public void promoteUser(SportsMan sportsMan){
+        sportsMan.addRoles(this.findConfirmedRole());
         this.saveUser(sportsMan);
     }
 

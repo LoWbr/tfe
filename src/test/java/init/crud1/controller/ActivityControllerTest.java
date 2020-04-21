@@ -30,8 +30,6 @@ class ActivityControllerTest {
     @MockBean
     private ManagementService managementService;
     @MockBean
-    private CommentService commentService;
-    @MockBean
     private NewsService newsService;
 
     @Test

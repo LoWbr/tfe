@@ -1,6 +1,9 @@
 package init.crud1.service;
 
 import init.crud1.entity.*;
+import init.crud1.form.ActivityTypeForm;
+import init.crud1.form.LevelForm;
+import init.crud1.form.TopicForm;
 import init.crud1.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,13 +55,27 @@ public class ManagementService {
         return candidates;
     }
 
-    public void saveTopic(Topic topic) {
+    public void addTopic(SportsMan sportsMan, TopicForm topicForm) {
+
+        Topic topic = new Topic(sportsMan, topicForm);
         this.topicRepository.save(topic);
     }
 
     public ActivityType findSpecificActivityType(Long id) {
         return this.activityTypeRepository.findSpecific(id);
     }
+
+    public void createType(ActivityTypeForm activityTypeForm){
+        ActivityType activityType = new ActivityType();
+        activityType.update(activityTypeForm);
+        this.saveType(activityType);
+    }
+
+    public void updateType(ActivityType activityType, ActivityTypeForm activityTypeForm){
+        activityType.update(activityTypeForm);
+        this.saveType(activityType);
+    }
+
 
     public void saveType(ActivityType activityType) {
         this.activityTypeRepository.save(activityType);
@@ -71,6 +88,12 @@ public class ManagementService {
     //AllLevels
     public Iterable<Level> getAllLevels(){
         return this.levelRepository.findAll();
+    }
+
+
+    public void updateLevel(LevelForm levelForm, Level level){
+        level.update(levelForm);
+        this.saveLevel(level);
     }
 
     public void saveLevel(Level level) {

@@ -2,6 +2,7 @@ package init.crud1.service;
 
 import init.crud1.entity.*;
 import init.crud1.form.ActivityForm;
+import init.crud1.form.CommentForm;
 import init.crud1.form.SearchActivityForm;
 import init.crud1.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,8 +123,30 @@ public class ActivityService {
         this.saveActivity(activity);
     }
 
+    //SaveComment
+    public CommentForm initiateCommentForm(Activity activity, SportsMan sportsMan){
+        CommentForm commentForm = new CommentForm(sportsMan, activity);
+        return commentForm;
+    }
+
+    //SaveComment
+    public void createComment(Comment comment){
+        this.commentRepository.save(comment);
+    }
 
 
+
+    public void cancelOrActivateActivity(Activity activity, boolean status){
+        if(status){
+            activity.setOpen(status);
+            this.saveActivity(activity);
+        }
+        else{
+            activity.setOpen(status);
+            this.saveActivity(activity);
+        }
+
+    }
 
 
     //AllActivityKinds
