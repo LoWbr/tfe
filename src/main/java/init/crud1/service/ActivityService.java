@@ -5,6 +5,7 @@ import init.crud1.form.ActivityForm;
 import init.crud1.form.CommentForm;
 import init.crud1.form.SearchActivityForm;
 import init.crud1.repository.*;
+import init.crud1.repository.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ public class ActivityService {
     StatisticRepository statisticRepository;
     CommentRepository commentRepository;
     LevelRepository levelRepository;
+    AddressRepository addressRepository;
     NewsService newsService;
     SportsManService sportsManService;
 
@@ -26,13 +28,14 @@ public class ActivityService {
     public ActivityService(ActivityRepository activityRepository, ActivityTypeRepository activityTypeRepository,
                            StatisticRepository statisticRepository, CommentRepository commentRepository,
                            LevelRepository levelRepository, SportsManService sportsManService,
-                           NewsService newsService) {
+                           AddressRepository addressRepository, NewsService newsService) {
         this.activityRepository = activityRepository;
         this.activityTypeRepository = activityTypeRepository;
         this.statisticRepository = statisticRepository;
         this.commentRepository = commentRepository;
         this.levelRepository = levelRepository;
         this.sportsManService = sportsManService;
+        this.addressRepository = addressRepository;
         this.newsService = newsService;
     }
 
@@ -64,14 +67,17 @@ public class ActivityService {
     }
 
     //CreateEvent
-    public void createActivity(ActivityForm activityForm, SportsMan sportsMan) throws ParseException {
-        Activity activity = new Activity(activityForm, sportsMan);
+    public void createActivity(ActivityForm activityForm, SportsMan sportsMan, Address address) throws ParseException {
+        Activity activity = new Activity(activityForm, sportsMan, address);
         this.saveActivity(activity);
     }
 
     //UpdateEvent
     public void updateActivity(Activity activity, ActivityForm activityForm){
-        activity.update(activityForm);
+        Address address = this.addressRepository.findSpecific(activity.getAddress().getId());
+        address.update(activityForm);
+        addressRepository.save(address);
+        activity.update(activityForm, address);
         this.saveActivity(activity);
     }
 
@@ -166,4 +172,9 @@ public class ActivityService {
         return this.commentRepository.findForEvent(activity);
     }
 
+    public Address createAddress(ActivityForm activityForm) {
+        Address address = new Address(activityForm);
+        this.addressRepository.save(address);
+        return address;
+    }
 }

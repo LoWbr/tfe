@@ -1,5 +1,7 @@
 package init.crud1.entity;
 
+import init.crud1.form.ActivityForm;
+
 import javax.persistence.*;
 
 @Entity
@@ -71,5 +73,23 @@ public class Address {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public Address(){}
+
+    public Address(ActivityForm activityForm) {
+        this.number = activityForm.getNumber();
+        this.street = activityForm.getStreet();
+        this.postalCode = activityForm.getPostalCode();
+        this.city = activityForm.getCity();
+        this.country = activityForm.getCountry();
+    }
+
+    public void update(ActivityForm activityForm){
+        this.number = activityForm.getNumber();
+        this.street = activityForm.getStreet();
+        this.postalCode = activityForm.getPostalCode();
+        this.city = activityForm.getCity();
+        this.country = activityForm.getCountry();
     }
 }

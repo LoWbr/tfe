@@ -5,6 +5,8 @@ import init.crud1.form.ActivityForm;
 import javax.persistence.*;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -25,8 +27,8 @@ public class Activity {
     @Column(name = "plannedTo")
     private LocalDate plannedTo;
 
-/*    @Column(name = "hour", columnDefinition = "DATE")
-    private LocalDateTime hour;*/
+    @Column(name = "hour")
+    private LocalTime hour;
 
     @OneToOne
     @JoinColumn(name="fk_type_activity", referencedColumnName = "id", nullable = false)
@@ -129,13 +131,13 @@ public class Activity {
         this.plannedTo = plannedTo;
     }
 
-   /* public LocalDateTime getHour() {
+    public LocalTime getHour() {
         return hour;
     }
 
-    public void setHour(LocalDateTime hour) {
+    public void setHour(LocalTime hour) {
         this.hour = hour;
-    }*/
+    }
 
     public List<SportsMan> getRegistered() {
         return registered;
@@ -196,18 +198,19 @@ public class Activity {
     public Activity() {
     }
 
-    public Activity(ActivityForm activityForm, SportsMan sportsMan) throws ParseException {
+    public Activity(ActivityForm activityForm, SportsMan sportsMan, Address address) throws ParseException {
         this.name = activityForm.getName();
         this.description = activityForm.getDescription();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.plannedTo = LocalDate.parse(activityForm.getPlannedTo(),formatter).plusDays(1);
-        /*DateTimeFormatter sdf = DateTimeFormatter.ofPattern("hh:mm:ss");
-        this.hour = LocalTime.parse(activityForm.getHour(), sdf);*/
+        String test = activityForm.getHour().concat(":00");
+        this.hour = LocalTime.parse(test).plusHours(1);
         this.minimumLevel = activityForm.getMinimumLevel();
         this.maximumLevel = activityForm.getMaximumLevel();
         this.duration = activityForm.getDuration();
         this.activity = activityForm.getActivity();
         this.creator = sportsMan;
+        this.address = address;
         this.open = true;
         this.over = false;
     }
@@ -220,15 +223,18 @@ public class Activity {
         this.registered.remove(sportsMan);
     }
 
-    public void update(ActivityForm activityForm) {
+    public void update(ActivityForm activityForm, Address address) {
         this.name = activityForm.getName();
         this.activity = activityForm.getActivity();
         this.description = activityForm.getDescription();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.plannedTo = LocalDate.parse(activityForm.getPlannedTo(),formatter).plusDays(1);
+        String test = activityForm.getHour().concat(":00");
+        this.hour = LocalTime.parse(test).plusHours(1);
         this.duration = activityForm.getDuration();
         this.minimumLevel = activityForm.getMinimumLevel();
         this.maximumLevel = activityForm.getMaximumLevel();
+        this.address = address;
     }
 
     public void closeEvent() {

@@ -43,7 +43,8 @@ public class ActivityController {
     @RequestMapping(value = "saveEvent", method = RequestMethod.POST)
     public String saveEvent(@ModelAttribute("ActivityForm") ActivityForm activityForm,
                             Principal principal) throws ParseException {
-        activityService.createActivity(activityForm, sportsManService.findCurrentUser(principal.getName()));
+        activityService.createActivity(activityForm, sportsManService.findCurrentUser(principal.getName()),
+                activityService.createAddress(activityForm));
         return "redirect:/events";
     }
 
@@ -78,7 +79,8 @@ public class ActivityController {
 
     @RequestMapping(value = "/event/update{id}", method = RequestMethod.GET)
     public String updateEventForm(@RequestParam Long id, Model model) {
-        ActivityForm activityForm = new ActivityForm(activityService.getSpecificActivity(id));
+        ActivityForm activityForm = new ActivityForm(activityService.getSpecificActivity(id),
+                activityService.getSpecificActivity(id).getAddress());
         model.addAttribute("allKinds", activityService.getAllActivityTypes());
         model.addAttribute("activityForm", activityForm);
         model.addAttribute("allLevels", activityService.getAllLevels());
@@ -87,6 +89,9 @@ public class ActivityController {
 
     @RequestMapping(value = "/updateEvent", method = RequestMethod.POST)
     public String updateEvent(@ModelAttribute("activityForm") ActivityForm activityForm) {
+        //1.Récup Address via l'id de l'activity dans le form
+        //2.Update
+        //3.Update Activity
         activityService.updateActivity(activityService.getSpecificActivity(activityForm.getId()), activityForm);
         return "events";
     }
