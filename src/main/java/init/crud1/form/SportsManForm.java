@@ -27,17 +27,18 @@ public class SportsManForm {
     @Email
     private String mail;
 
-    @NotBlank
-    @Size(min=8, max=60, message="Between 8 and 15")
+    @NotBlank(message = "You have to create a password!!")
+    @Size(min=8, max=60, message="More than 8 characters")
     private String password;
 
+    @NotBlank(message = "You have to validate the password")
     private String confirmPassword;
 
-    @NotBlank
-  /* @Past*/
+    @NotBlank(message = "You have to give a date of Birth")
     private String dateofBirth;
 
-    @Positive
+    @Positive(message = "You have to put a valid value (positive)")
+    @NotNull(message = "Enter your weight")
     private Double weight;
 
     public String getFirstname() {

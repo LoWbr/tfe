@@ -21,6 +21,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.naming.Binding;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -57,8 +60,18 @@ public class SportsManController {
             System.out.println("Errors: " + bindingResult.getErrorCount());
             return "signUp";
         }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dateInput = LocalDate.parse(sportsManForm.getDateofBirth(),formatter).plusDays(1);
+        LocalDate current = LocalDate.now();
+
         if(this.sportsManService.findCurrentUser(sportsManForm.getMail()) != null) {
             bindingResult.rejectValue("mail", "", "This account already exists");
+            return "signUp";
+        }
+        else if(Period.between(dateInput,current).getYears() < 18){
+            System.out.println(Period.between(dateInput,current).getYears());
+            bindingResult.rejectValue("dateofBirth","","You must have 18 years old to register");
             return "signUp";
         }
         else if(!(sportsManForm.getPassword()).equals(sportsManForm.getConfirmPassword())){
