@@ -8,8 +8,10 @@ import init.crud1.service.SportsManService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.text.ParseException;
 
@@ -31,18 +33,28 @@ public class ActivityController {
         return "events";
     }
 
+    @ModelAttribute
+    public void init(Model model) {
+        model.addAttribute("activityForm", new ActivityForm());
+        model.addAttribute("allKinds", activityService.getAllActivityTypes());
+        model.addAttribute("allLevels", activityService.getAllLevels());
+    }
+
     @RequestMapping(value ="/create", method = RequestMethod.GET)
     public String createEvent(Model model) {
-        ActivityForm activityForm = new ActivityForm();
-        model.addAttribute("activityForm", activityForm);//new ActivityForm() à tester!!
+        model.addAttribute("activityForm", new ActivityForm());
         model.addAttribute("allKinds", activityService.getAllActivityTypes());
         model.addAttribute("allLevels", activityService.getAllLevels());
         return "createEvent";
     }
 
     @RequestMapping(value = "saveEvent", method = RequestMethod.POST)
-    public String saveEvent(@ModelAttribute("ActivityForm") ActivityForm activityForm,
+    public String saveEvent(@Valid @ModelAttribute ("activityForm") ActivityForm activityForm, BindingResult bindingResult,
                             Principal principal) throws ParseException {
+        if(bindingResult.hasErrors()){
+            System.out.println("Errors: " + bindingResult.getErrorCount());
+            return "createEvent";
+        }
         activityService.createActivity(activityForm, sportsManService.findCurrentUser(principal.getName()),
                 activityService.createAddress(activityForm));
         return "redirect:/events";

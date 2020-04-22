@@ -91,7 +91,7 @@ public class SportsManController {
 	public String updateSportsMan(@Valid SportsManForm sportsManForm,
 			BindingResult bindingResult, Principal principal) {
 		if(bindingResult.hasErrors()){
-			return "user";
+			return "updateUser";
 		}
 		sportsManService.updateUser(sportsManService.findCurrentUser(principal.getName()), sportsManForm);
 		return "users";

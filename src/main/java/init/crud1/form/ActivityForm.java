@@ -2,6 +2,7 @@ package init.crud1.form;
 
 import init.crud1.entity.*;
 
+import javax.validation.constraints.*;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,18 +11,44 @@ import java.time.format.DateTimeFormatter;
 public class ActivityForm {
 
     private Long id;
+
+    @NotBlank(message = "This field cannot be empty!!")
+    @Size(max=60, message="Maximum 60 characters")
     private String name;
+
+    @NotBlank(message = "Give a short explanation")
+    @Size(max=150, message="Maximum 150 characters")
     private String description;
+
+    @NotBlank(message = "You have to give a date")
     private String plannedTo;
+
+    @NotBlank(message = "You have to give an hour")
     private String hour;
+
     private ActivityType activity;
+
     private Level minimumLevel;
     private Level maximumLevel;
+
+    @Max(120)
+    @Min(30)
     private Integer duration;
+
+    @Positive(message = "Get whole number")
+    @Digits(integer=6,fraction=0)
     private int number;
+    @NotBlank(message = "You should get a Street")
+    @Size(max=60, message="Maximum 60 characters")
     private String street;
+    @Positive(message = "Get whole number")
+    @Digits(integer=6,fraction=0)
     private int postalCode;
+    @NotBlank(message = "You should get a City")
+    @Size(max=60, message="Maximum 60 characters")
     private String city;
+    @NotBlank(message = "You should get a Country")
+    @Size(max=80, message="Maximum 80 characters")
     private String country;
 
     public Long getId() {
