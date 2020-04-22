@@ -52,31 +52,48 @@ class ActivityControllerTest {
                 .andExpect(model().attributeExists("activityForm","allKinds","allLevels"));
     }
 
-  /*  @Test
-    @WithMockUser(roles = {"CONFIRMED", "ADMINISTRATOR"})
+    /*@Test
+    @WithAnonymousUser
     void saveEvent() throws Exception {
 
         mockMvc.perform(post("/saveEvent"))
-                .andExpect(status().is3xxRedirection())
+                .andExpect(status().is2xxSuccessful())
                 .andExpect(redirectedUrl("/events"));
 
     }*/
 
     @Test
+    @WithAnonymousUser
     void eventDetails() {
     }
 
     @Test
-    void getActivitiesByCreator() {
+    @WithMockUser(roles = {"CONFIRMED", "ADMINISTRATOR"})
+    void getActivitiesByCreator() throws Exception {
+
+        mockMvc.perform(get("/eventsByCreator"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(view().name("ownEvents"))
+                .andExpect(model().size(1))
+                .andExpect(model().attributeExists("ownCreations"));
+
     }
 
     @Test
     void ownEventDetails() {
     }
 
-    @Test
-    void updateEventForm() {
-    }
+   /* @Test
+    @WithMockUser(roles = {"CONFIRMED", "ADMINISTRATOR"})
+    void updateEventForm() throws Exception {
+
+        mockMvc.perform(get("/event/update?id=1"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(view().name("updateEvent"))
+                .andExpect(model().size(3))
+                .andExpect(model().attributeExists("allKinds", "allLevels", "activityForm"));
+
+    }*/
 
     @Test
     void updateEvent() {
