@@ -12,7 +12,7 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id", updatable = true, nullable = false)
+    @Column(updatable = false, nullable = false)
     private Long id;
 
     @CreationTimestamp
@@ -26,7 +26,6 @@ public class Comment {
     @JoinColumn(name="fk_activity", referencedColumnName = "id", nullable = false)
     private Activity activity;
 
-    @Column(name="content")
     @Lob
     private String content;
 

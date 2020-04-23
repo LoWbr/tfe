@@ -31,19 +31,19 @@ public class ActivityForm {
     private Level minimumLevel;
     private Level maximumLevel;
 
-    @Max(120)
+    @Max(180)
     @Min(30)
-    private Integer duration;
+    private Short duration;
 
     @Positive(message = "Get whole number")
     @Digits(integer=6,fraction=0)
-    private int number;
+    private Short number;
     @NotBlank(message = "You should get a Street")
     @Size(max=60, message="Maximum 60 characters")
     private String street;
     @Positive(message = "Get whole number")
     @Digits(integer=6,fraction=0)
-    private int postalCode;
+    private Short postalCode;
     @NotBlank(message = "You should get a City")
     @Size(max=60, message="Maximum 60 characters")
     private String city;
@@ -115,19 +115,19 @@ public class ActivityForm {
         this.maximumLevel = maximumLevel;
     }
 
-    public Integer getDuration() {
+    public Short getDuration() {
         return duration;
     }
 
-    public void setDuration(Integer duration) {
+    public void setDuration(Short duration) {
         this.duration = duration;
     }
 
-    public int getNumber() {
+    public Short getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(Short number) {
         this.number = number;
     }
 
@@ -139,11 +139,11 @@ public class ActivityForm {
         this.street = street;
     }
 
-    public int getPostalCode() {
+    public Short getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(Short postalCode) {
         this.postalCode = postalCode;
     }
 

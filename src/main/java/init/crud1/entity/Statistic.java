@@ -14,11 +14,9 @@ public class Statistic {
     @JoinColumn(referencedColumnName = "id", nullable = false)
     private SportsMan sportsMan;
 
-    @Column
     private Integer earnedPoints;
 
     @OneToOne
-    @JoinColumn
     private Activity activity;
 
     @Column(precision = 4, scale = 2)

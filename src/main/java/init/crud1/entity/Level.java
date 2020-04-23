@@ -12,14 +12,11 @@ public class Level {
     @Column(name = "id",updatable = true, nullable = false)
     private Long id;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "place")
-    private Long place;
+    private Byte place;
 
-    @Column(name = "maximum_threshold")
-    private Integer maximumThreshold;
+    private Short maximumThreshold;
 
     @Column(name = "ratio_points")
     private Double ratioPoints;
@@ -40,19 +37,19 @@ public class Level {
         this.name = name;
     }
 
-    public Long getPlace() {
+    public Byte getPlace() {
         return place;
     }
 
-    public void setPlace(Long place) {
+    public void setPlace(Byte place) {
         this.place = place;
     }
 
-    public Integer getMaximumThreshold() {
+    public Short getMaximumThreshold() {
         return maximumThreshold;
     }
 
-    public void setMaximumThreshold(Integer maximumThreshold) {
+    public void setMaximumThreshold(Short maximumThreshold) {
         this.maximumThreshold = maximumThreshold;
     }
 

@@ -131,8 +131,9 @@ public class ActivityService {
 			sportsman.setPoints(energeticExpenditure);
 			if (sportsman.checkLevelStatus()){
 				newsService.returnApplicationResultNewOrLevelUpNew(sportsman,NewsType.LEVEL_UP);
-				Long new_place = sportsman.getLevel().getPlace()+1;
-				sportsman.setLevel(sportsManService.findSpecificLevel(new_place));
+				Byte new_place = sportsman.getLevel().getPlace();
+				new_place++;
+				sportsman.setLevel(sportsManService.findSpecificLevel(Long.valueOf(new_place)));
 			}
 			sportsManService.saveUser(sportsman);
 			Statistic statistic = new Statistic(sportsman, activity, energeticExpenditure);

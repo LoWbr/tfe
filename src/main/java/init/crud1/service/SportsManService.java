@@ -131,7 +131,7 @@ public class SportsManService {
 
 	public void createUser(SportsManForm sportsManForm){
 		SportsMan sportsMan = new SportsMan(sportsManForm);
-		sportsMan.setLevel(findSpecificLevel(new Long(1)));
+		sportsMan.setLevel(findBeginner());
 		sportsMan.addRoles(findSimplyRole());
 		sportsMan.setPassword(passwordEncoder.encode(sportsManForm.getPassword()));
 		this.saveUser(sportsMan);
@@ -162,6 +162,10 @@ public class SportsManService {
 	//FindSpecificLevel
 	public Level findSpecificLevel(Long id){
 		return this.levelRepository.findSpecific(id);
+	}
+
+	public Level findBeginner(){
+		return this.levelRepository.findSpecific((long) 1);
 	}
 
 	//FindAllRole

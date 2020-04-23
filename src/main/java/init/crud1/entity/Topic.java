@@ -12,7 +12,7 @@ public class Topic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id", updatable = true, nullable = false)
+    @Column(updatable = true, nullable = false)
     private Long id;
 
     @CreationTimestamp
@@ -22,7 +22,6 @@ public class Topic {
     @JoinColumn(name="fk_author", referencedColumnName = "id", nullable = false)
     private SportsMan author;
 
-    @Column(name="content")
     @Lob
     private String content;
 

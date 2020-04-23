@@ -14,38 +14,36 @@ public class SportsMan  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = true, nullable = false)
+    @Column(updatable = true, nullable = false)
     private Long id;
 
-    @Column(name="firstName",length = 30)
+    @Column(length = 30)
     private String firstName;
 
-    @Column(name="lastName",length = 30)
+    @Column(length = 30)
     private String lastName;
 
-    @Column(name="description", columnDefinition="TEXT")
+    @Column(columnDefinition="TEXT")
     private String description;
 
-    @Column(name = "dateOfBirth", columnDefinition = "DATE")
+    @Column(columnDefinition = "DATE")
     private LocalDate dateOfBirth;
 
-    @Column(name="email",length = 40)
+    @Column(length = 40)
     private String email;
 
-    @Column(name="password", length = 80)
+    @Column(length = 80)
     private String password;
 
     @OneToOne
-    @JoinColumn(name="level", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name="fk_level", referencedColumnName = "id", nullable = false)
     Level level;
 
-    @Column(name="weight")
     private Double weight;
 
-    @Column(name="points", columnDefinition = "integer default 0")
     private Integer points;
 
-    @Column(name="blocked", nullable = true, columnDefinition = "boolean default false")
+    @Column(nullable = false)
     private Boolean blocked;
 
     @OneToMany(mappedBy = "creator")
@@ -53,6 +51,12 @@ public class SportsMan  {
 
     @ManyToMany(mappedBy = "registered")
     private List<Activity> registeredActivities;
+
+    @OneToMany(mappedBy = "originator")
+    private List<Message> SenddMessages;
+
+    @ManyToMany(mappedBy = "addressee")
+    private List<Message> ReceivedMessages;
 
     @ManyToMany
     private List<SportsMan> contacts;

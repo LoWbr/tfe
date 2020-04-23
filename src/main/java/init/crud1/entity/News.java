@@ -9,25 +9,24 @@ public class News{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = true, nullable = false)
+    @Column(updatable = true, nullable = false)
     private Long id;
 
     @OneToOne
-    @JoinColumn(name="sportsManTarget", referencedColumnName = "id")
+    @JoinColumn(name="fk_target", referencedColumnName = "id")
     private SportsMan target;
 
     @OneToOne
-    @JoinColumn(name="sportsManSource", referencedColumnName = "id")
+    @JoinColumn(name="fk_source", referencedColumnName = "id")
     private SportsMan source;
 
     @OneToOne
-    @JoinColumn(name="concernedActivity", referencedColumnName = "id")
+    @JoinColumn(name="fk_activity", referencedColumnName = "id")
     private Activity activity;
 
     @Enumerated(EnumType.STRING)
     private NewsType type;
 
-    @Column(name="seen")
     private boolean seen;
 
     public Long getId() {

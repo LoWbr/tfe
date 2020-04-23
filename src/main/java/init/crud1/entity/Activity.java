@@ -5,7 +5,6 @@ import init.crud1.form.ActivityForm;
 import javax.persistence.*;
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -15,23 +14,20 @@ public class Activity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id",updatable = true, nullable = false)
+    @Column(updatable = false, nullable = false)
     private Long id;
 
-    @Column(name = "name", length = 60)
     private String name;
 
-    @Column(name="description", columnDefinition="TEXT")
+    @Column(columnDefinition="TEXT")
     private String description;
 
-    @Column(name = "plannedTo")
     private LocalDate plannedTo;
 
-    @Column(name = "hour")
     private LocalTime hour;
 
     @OneToOne
-    @JoinColumn(name="fk_type_activity", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name="fk_activity",referencedColumnName = "id", nullable = false)
     private ActivityType activity;
 
     @OneToOne
@@ -46,8 +42,8 @@ public class Activity {
     @JoinColumn(name="fk_maximum_level", referencedColumnName = "id", nullable = false)
     private Level maximumLevel;
 
-    @Column(name="duration", nullable = true)
-    private Integer duration;
+    @Column(nullable = false)
+    private Short duration;
 
     @ManyToOne
     @JoinColumn(name="fk_creator", referencedColumnName = "id", nullable = false)
@@ -61,10 +57,10 @@ public class Activity {
     @JoinColumn(name="fk_user_registered", referencedColumnName = "id", nullable = false)
     private List<SportsMan> registered;
 
-    @Column(name="open", nullable = false, columnDefinition = "boolean default true")
+    @Column(nullable = false, columnDefinition = "boolean default true")
     private Boolean open;
 
-    @Column(name="over", nullable = false, columnDefinition = "boolean default false")
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private Boolean over;
 
     public Long getId() {
@@ -91,11 +87,11 @@ public class Activity {
         this.activity = activity;
     }
 
-    public Integer getDuration() {
+    public Short getDuration() {
         return duration;
     }
 
-    public void setDuration(Integer duration) {
+    public void setDuration(Short duration) {
         this.duration = duration;
     }
 

@@ -12,19 +12,14 @@ public class Address {
     @Column(name = "id",updatable = true, nullable = false)
     private Long id;
 
-    @Column(name = "number")
-    private int number;
+    private Short number;
 
-    @Column(name = "street", length = 60)
     private String street;
 
-    @Column(name = "postalCode")
-    private int postalCode;
+    private Short postalCode;
 
-    @Column(name = "city", length = 60)
     private String city;
 
-    @Column(name = "country", length = 60)
     private String country;
 
     public Long getId() {
@@ -35,11 +30,11 @@ public class Address {
         this.id = id;
     }
 
-    public int getNumber() {
+    public Short getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(Short number) {
         this.number = number;
     }
 
@@ -51,11 +46,11 @@ public class Address {
         this.street = street;
     }
 
-    public int getPostalCode() {
+    public Short getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(Short postalCode) {
         this.postalCode = postalCode;
     }
 

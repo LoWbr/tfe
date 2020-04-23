@@ -8,16 +8,16 @@ public class PromotionRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = true, nullable = false)
+    @Column(updatable = true, nullable = false)
     private Long id;
 
     @OneToOne
-    @JoinColumn(name="candidate", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name="fk_candidate", referencedColumnName = "id", nullable = false)
     private SportsMan candidate;
 
     @OneToOne
-    @JoinColumn(name = "inDemand", referencedColumnName = "id", nullable = false)
-    private Role inDemand;
+    @JoinColumn(name = "fk_request_role", referencedColumnName = "id", nullable = false)
+    private Role request;
 
     public Long getId() {
         return id;
@@ -36,11 +36,11 @@ public class PromotionRequest {
     }
 
     public Role getInDemand() {
-        return inDemand;
+        return request;
     }
 
     public void setInDemand(Role inDemand) {
-        this.inDemand = inDemand;
+        this.request = inDemand;
     }
 
     public PromotionRequest() {
@@ -48,6 +48,6 @@ public class PromotionRequest {
 
     public PromotionRequest(SportsMan candidate, Role inDemand) {
         this.candidate = candidate;
-        this.inDemand = inDemand;
+        this.request = request;
     }
 }

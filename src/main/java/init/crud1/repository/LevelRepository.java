@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface LevelRepository extends CrudRepository<Level,Long> {
 
-    @Query("Select level from Level level where level.place = :id")
+    @Query("Select level from Level level where level.id = :id")
     Level findSpecific(
             @Param("id") Long id);
 

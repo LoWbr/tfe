@@ -4,8 +4,8 @@ package init.crud1.form;
 public class LevelForm {
 
     private String name;
-    private Long place;
-    private Integer maximumThreshold;
+    private Byte place;
+    private Short maximumThreshold;
     private Double ratioPoints;
 
     public String getName() {
@@ -16,19 +16,19 @@ public class LevelForm {
         this.name = name;
     }
 
-    public Long getPlace() {
+    public Byte getPlace() {
         return place;
     }
 
-    public void setPlace(Long place) {
+    public void setPlace(Byte place) {
         this.place = place;
     }
 
-    public Integer getMaximumThreshold() {
+    public Short getMaximumThreshold() {
         return maximumThreshold;
     }
 
-    public void setMaximumThreshold(Integer maximumThreshold) {
+    public void setMaximumThreshold(Short maximumThreshold) {
         this.maximumThreshold = maximumThreshold;
     }
 

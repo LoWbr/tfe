@@ -9,13 +9,13 @@ public class ActivityType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id",updatable = true, nullable = false)
+    @Column(updatable = false, nullable = false)
     private Long id;
 
-    @Column(name="name",length = 30)
+    @Column(length = 40, nullable = false)
     private String name;
 
-    @Column(name="met"/*,precision = 4, scale = 2*/)
+    @Column(nullable = false)
     private Double met;
 
     public Long getId() {
