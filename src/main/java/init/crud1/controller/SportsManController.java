@@ -5,10 +5,19 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
+import javax.management.remote.JMXAuthenticator;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -50,7 +59,8 @@ public class SportsManController {
 	}
 
 	@RequestMapping(value = "saveUser", method = RequestMethod.POST)
-	public String saveSportsMan(@Valid SportsManForm sportsManForm, BindingResult bindingResult) throws UserAlreadyExistException {
+	public String saveSportsMan(@Valid SportsManForm sportsManForm, BindingResult bindingResult,
+								HttpServletRequest request, HttpServletResponse response) throws UserAlreadyExistException {
 
 		if(bindingResult.hasErrors()){
 			System.out.println("Errors: " + bindingResult.getErrorCount());
@@ -75,9 +85,18 @@ public class SportsManController {
 			return "signUp";
 		}
 		else{
-			sportsManService.createUser(sportsManForm); //NB : if update de l'email, déconnexion à mettre en place
-		}                                               // ou refresh!!! (à creuser!!)
+			sportsManService.createUser(sportsManForm); //NB : if update de l'email, déconnexion à mettre en place  // ou refresh!!! (à creuser!!)
+			authWithHttpServletRequest(request,sportsManForm.getMail(), sportsManForm.getPassword());
+		}
+
 		return "users";
+	}
+	public void authWithHttpServletRequest(HttpServletRequest request, String username, String password) {
+		try {
+			request.login(username, password);
+		} catch (ServletException e) {
+
+		}
 	}
 
 	@RequestMapping(value = "/user/update", method = RequestMethod.GET)
