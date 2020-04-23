@@ -38,7 +38,7 @@ class ActivityControllerTest {
         mockMvc.perform(get("/events"))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(view().name("events"))
-                .andExpect(model().size(1))
+                .andExpect(model().size(4))
                 .andExpect(model().attributeExists("allActivities"));
     }
 
@@ -74,7 +74,7 @@ class ActivityControllerTest {
         mockMvc.perform(get("/eventsByCreator"))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(view().name("ownEvents"))
-                .andExpect(model().size(1))
+                .andExpect(model().size(4))
                 .andExpect(model().attributeExists("ownCreations"));
 
     }
