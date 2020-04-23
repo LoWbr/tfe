@@ -185,4 +185,8 @@ public class ActivityService {
 		this.addressRepository.save(address);
 		return address;
 	}
+
+    public Activity getActivityByName(String name) {
+		return this.activityRepository.findByName(name);
+    }
 }

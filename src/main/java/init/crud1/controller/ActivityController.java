@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.text.ParseException;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 public class ActivityController {
@@ -49,14 +54,41 @@ public class ActivityController {
     }
 
     @RequestMapping(value = "saveEvent", method = RequestMethod.POST)
-    public String saveEvent(@Valid @ModelAttribute ("activityForm") ActivityForm activityForm, BindingResult bindingResult,
+    public String saveEvent(@Valid @ModelAttribute("activityForm") ActivityForm activityForm, BindingResult bindingResult,
                             Principal principal) throws ParseException {
         if(bindingResult.hasErrors()){
             System.out.println("Errors: " + bindingResult.getErrorCount());
             return "createEvent";
         }
-        activityService.createActivity(activityForm, sportsManService.findCurrentUser(principal.getName()),
-                activityService.createAddress(activityForm));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dateInput = LocalDate.parse(activityForm.getPlannedTo(),formatter);
+        LocalDate current = LocalDate.now();
+
+        LocalTime start = LocalTime.now();
+        LocalTime end = LocalTime.parse(activityForm.getHour().concat(":00"));
+        Duration duration = Duration.between(start, end);
+
+        if(Period.between(dateInput,current).getDays() > 0){
+            bindingResult.rejectValue("plannedTo","","You have to set a valid date");
+            return "createEvent";
+        }
+        else if(Period.between(dateInput,current).getDays() >= 0 && duration.getSeconds() < 3600){
+            bindingResult.rejectValue("hour","","You have to set a valid hour");
+            return "createEvent";
+        }
+        else if(activityForm.getMinimumLevel().getPlace() > activityForm.getMaximumLevel().getPlace()){
+            bindingResult.rejectValue("maximumLevel", "", "Should be equal or greater than" +
+                    " Minimum Level");
+            return "createEvent";
+        }
+        else if(activityService.getActivityByName(activityForm.getName()) != null){
+            bindingResult.rejectValue("name", "", "this event already exists");
+            return "createEvent";
+        }
+        else {
+            activityService.createActivity(activityForm, sportsManService.findCurrentUser(principal.getName()),
+                    activityService.createAddress(activityForm));
+        }
         return "redirect:/events";
     }
 

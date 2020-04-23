@@ -31,4 +31,7 @@ public interface ActivityRepository extends CrudRepository<Activity, Long> {
             @Param("activity") ActivityType activityType,
             @Param("level") Level level);
 
+    @Query("Select event from Activity event where event.name = :name")
+    Activity findByName(
+            @Param("name") String name);
 }

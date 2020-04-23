@@ -6,6 +6,7 @@ import javax.validation.constraints.*;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class ActivityForm {
@@ -164,6 +165,10 @@ public class ActivityForm {
     }
 
     public ActivityForm() {
+        LocalDate current = LocalDate.now();
+        this.plannedTo = current.toString();
+        LocalTime currentTime = LocalTime.now();
+        this.hour = currentTime.toString();
     }
 
     public ActivityForm(Activity activity, Address address) {
