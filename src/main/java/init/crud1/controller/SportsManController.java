@@ -163,7 +163,7 @@ public class SportsManController {
 	}
 	//Get Notification Page
 	@RequestMapping(value = "/notifications", method = RequestMethod.GET)
-	public String getMessagePageForm(Model model,Principal principal){
+	public String notifications(Model model,Principal principal){
 		model.addAttribute("notifications",
 				sportsManService.getNotifications(sportsManService.findCurrentUser(principal.getName())));
 		return "notifications";

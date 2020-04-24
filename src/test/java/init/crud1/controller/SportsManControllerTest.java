@@ -11,8 +11,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.security.Principal;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -79,6 +85,42 @@ class SportsManControllerTest {
 
     @Test
     void getRegisteredEvents() {
+    }
+
+    @Test
+    @WithMockUser(roles = {"SIMPLY","CONFIRMED", "ADMINISTRATOR"})
+    void getAllMessageSent() throws Exception {
+
+        mockMvc.perform(get("/getMessagesSent"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(view().name("getMessages"))
+                .andExpect(model().size(2))
+                .andExpect(model().attributeExists("messages","status"));
+
+    }
+
+    @Test
+    @WithMockUser(roles = {"SIMPLY","CONFIRMED", "ADMINISTRATOR"})
+    void getAllReceivedMessages() throws Exception {
+
+        mockMvc.perform(get("/getReceivedMessages"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(view().name("getMessages"))
+                .andExpect(model().size(2))
+                .andExpect(model().attributeExists("messages","status"));
+
+    }
+
+    @Test
+    @WithMockUser(roles = {"SIMPLY","CONFIRMED", "ADMINISTRATOR"})
+    void notifications() throws Exception {
+
+        mockMvc.perform(get("/notifications"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(view().name("notifications"))
+                .andExpect(model().size(1))
+                .andExpect(model().attributeExists("notifications"));
+
     }
 
     @Test
