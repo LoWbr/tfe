@@ -38,9 +38,6 @@ public class SportsManController {
 	@Autowired
 	ManagementService managementService;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
 	@RequestMapping(value= "/users", method = RequestMethod.GET)
 	public String getSportsMen(Model model) {
 		model.addAttribute("allUsers", sportsManService.getAllUser());
@@ -165,12 +162,12 @@ public class SportsManController {
 		return "getMessages";
 	}
 	//Get Notification Page
-	/*@RequestMapping(value = "/GetNotifications", method = RequestMethod.GET)
-	public String getMessagePageForm(@RequestParam Long id, Model model,Principal principal){
-		model.addAttribute("messageForm", new MessageForm(sportsManService.findCurrentUser(principal.getName()),
-				sportsManService.findSpecificUser(id)));
-		return "createMessage";
-	}*/
+	@RequestMapping(value = "/notifications", method = RequestMethod.GET)
+	public String getMessagePageForm(Model model,Principal principal){
+		model.addAttribute("notifications",
+				sportsManService.getNotifications(sportsManService.findCurrentUser(principal.getName())));
+		return "notifications";
+	}
 	//FindContacts
 	@RequestMapping(value = "/contacts", method = RequestMethod.GET)
 	public String getContacts(Model model, Principal principal){

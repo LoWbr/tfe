@@ -135,4 +135,14 @@ public class NewsService {
     }
 
 
+    public List<News> getByUser(SportsMan currentUser) {
+        return this.newsRepository.findByUser(currentUser);
+    }
+
+    public void returnSendMessageNew(Message message, NewsType newsType) {
+        for (SportsMan sportsman:message.getAddressee()) {
+            News announceToCreator = new News(sportsman,message.getOriginator(),null,newsType, false);
+            this.saveNew(announceToCreator);
+        }
+    }
 }

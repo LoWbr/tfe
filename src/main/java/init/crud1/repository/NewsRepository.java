@@ -15,4 +15,7 @@ public interface NewsRepository extends CrudRepository<News, Long> {
             @Param("name") String name,
             @Param("type") NewsType newsType);
 
+    @Query("Select news from News news where news.target= :user")
+    List<News> findByUser(
+            @Param("user") SportsMan sporstman);
 }

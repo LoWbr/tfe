@@ -177,6 +177,7 @@ public class SportsManService {
     public void sendMessage(MessageForm messageForm) {
 		Message message = new Message(messageForm);
 		this.messageRepository.save(message);
+		this.newsService.returnSendMessageNew(message, NewsType.MESSAGE_SEND);
     }
 
 
@@ -188,4 +189,8 @@ public class SportsManService {
 
 		}
 	}
+
+    public List<News> getNotifications(SportsMan currentUser) {
+		return this.newsService.getByUser(currentUser);
+    }
 }
