@@ -1,6 +1,9 @@
 package init.crud1.entity;
 
+import init.crud1.form.MessageForm;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -23,6 +26,19 @@ public class Message {
 
     @Lob
     private String content;
+
+    private LocalDateTime timeOfDispatch;
+
+    public Message(){}
+
+    public Message(MessageForm messageForm) {
+        this.originator = messageForm.getOriginator();
+        this.addressee = messageForm.getAddressee();
+        this.about = messageForm.getAbout();
+        this.content = messageForm.getContent();
+        this.timeOfDispatch = LocalDateTime.now();
+
+    }
 
     public Long getId() {
         return id;
@@ -63,4 +79,14 @@ public class Message {
     public void setContent(String content) {
         this.content = content;
     }
+
+    public LocalDateTime getTimeOfDispatch() {
+        return timeOfDispatch;
+    }
+
+    public void setTimeOfDispatch(LocalDateTime timeOfDispatch) {
+        this.timeOfDispatch = timeOfDispatch;
+    }
+
+
 }

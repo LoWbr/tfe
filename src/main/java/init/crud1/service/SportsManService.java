@@ -2,21 +2,14 @@ package init.crud1.service;
 
 import java.util.List;
 
+import init.crud1.entity.*;
+import init.crud1.form.MessageForm;
+import init.crud1.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import init.crud1.entity.Level;
-import init.crud1.entity.NewsType;
-import init.crud1.entity.PromotionRequest;
-import init.crud1.entity.Role;
-import init.crud1.entity.SportsMan;
-import init.crud1.entity.Statistic;
 import init.crud1.form.SportsManForm;
-import init.crud1.repository.LevelRepository;
-import init.crud1.repository.RoleRepository;
-import init.crud1.repository.SportsManRepository;
-import init.crud1.repository.StatisticRepository;
 
 @Service
 public class SportsManService {
@@ -28,12 +21,13 @@ public class SportsManService {
 	private PasswordEncoder passwordEncoder;
 	ManagementService managementService;
 	NewsService newsService;
+	private MessageRepository messageRepository;
 
 	@Autowired
 	public SportsManService(SportsManRepository sportsManRepository, StatisticRepository statisticRepository,
 			LevelRepository levelRepository, RoleRepository roleRepository,
 			ManagementService managementService, PasswordEncoder passwordEncoder,
-			NewsService newsService) {
+			NewsService newsService, MessageRepository messageRepository) {
 		this.sportsManRepository = sportsManRepository;
 		this.statisticRepository = statisticRepository;
 		this.levelRepository = levelRepository;
@@ -41,6 +35,7 @@ public class SportsManService {
 		this.managementService = managementService;
 		this.passwordEncoder = passwordEncoder;
 		this.newsService = newsService;
+		this.messageRepository = messageRepository;
 	}
 
 	//FindCurrentUser
@@ -61,6 +56,11 @@ public class SportsManService {
 	//AllExceptCurrent
 	public Iterable<SportsMan> getAllExceptConnectedUser(Long id){
 		return this.sportsManRepository.findAllWithoutMe(id);
+	}
+
+	//AllContacts
+	public Iterable<SportsMan> getAllContacts(String mail){
+		return this.sportsManRepository.findSpecific(mail).getContacts();
 	}
 
 	//AllNotContactUsers
@@ -174,5 +174,18 @@ public class SportsManService {
 	}
 
 
+    public void sendMessage(MessageForm messageForm) {
+		Message message = new Message(messageForm);
+		this.messageRepository.save(message);
+    }
 
+
+	public List<Message> findMessages(SportsMan sportsMan, boolean status) {
+		if (status) {
+			return this.messageRepository.findByCreator(sportsMan);
+		} else {
+			return this.messageRepository.findByReceptor(sportsMan);
+
+		}
+	}
 }

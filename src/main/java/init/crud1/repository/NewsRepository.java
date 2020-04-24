@@ -14,4 +14,5 @@ public interface NewsRepository extends CrudRepository<News, Long> {
     List<News> filter(
             @Param("name") String name,
             @Param("type") NewsType newsType);
+
 }

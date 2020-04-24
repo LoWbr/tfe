@@ -14,7 +14,7 @@ public class ActivityForm {
     private Long id;
 
     @NotBlank(message = "This field cannot be empty!!")
-    @Size(max=60, message="Maximum 60 characters")
+    @Size(min= 10, max=60, message="Between 10 & 60 characters")
     private String name;
 
     @NotBlank(message = "Give a short explanation")

@@ -132,8 +132,41 @@ public class ActivityController {
     }
 
     @RequestMapping(value = "/updateEvent", method = RequestMethod.POST)
-    public String updateEvent(@ModelAttribute("activityForm") ActivityForm activityForm) {
-        activityService.updateActivity(activityService.getSpecificActivity(activityForm.getId()), activityForm);
+    public String updateEvent(@Valid @ModelAttribute("activityForm") ActivityForm activityForm, BindingResult
+                              bindingResult) {
+        if(bindingResult.hasErrors()){
+            System.out.println("Errors: " + bindingResult.getErrorCount());
+            return "createEvent";
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dateInput = LocalDate.parse(activityForm.getPlannedTo(),formatter);
+        LocalDate current = LocalDate.now();
+
+        LocalTime start = LocalTime.now();
+        LocalTime end = LocalTime.parse(activityForm.getHour().concat(":00"));
+        Duration duration = Duration.between(start, end);
+
+        if(Period.between(dateInput,current).getDays() > 0){
+            bindingResult.rejectValue("plannedTo","","You have to set a valid date");
+            return "createEvent";
+        }
+        else if(Period.between(dateInput,current).getDays() >= 0 && duration.getSeconds() < 3600){
+            bindingResult.rejectValue("hour","","You have to set a valid hour");
+            return "createEvent";
+        }
+        else if(activityForm.getMinimumLevel().getPlace() > activityForm.getMaximumLevel().getPlace()){
+            bindingResult.rejectValue("maximumLevel", "", "Should be equal or greater than" +
+                    " Minimum Level");
+            return "createEvent";
+        }
+        else if(activityService.getActivityByName(activityForm.getName()) != null){
+            bindingResult.rejectValue("name", "", "this event already exists");
+            return "createEvent";
+        }
+        else {
+            activityService.updateActivity(activityService.getSpecificActivity(activityForm.getId()), activityForm);
+        }
+
         return "events";
     }
 

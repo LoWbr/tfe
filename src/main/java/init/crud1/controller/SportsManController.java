@@ -5,19 +5,14 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
-import javax.management.remote.JMXAuthenticator;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import init.crud1.form.MessageForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -124,6 +119,71 @@ public class SportsManController {
 		model.addAttribute("statistics",
 				sportsManService.findBySportsMan(sportsManService.findCurrentUser(principal.getName())));
 		return "userDetails";
+	}
+
+	//Show User Details
+	@RequestMapping(value = "/sportsMan{id}", method = RequestMethod.GET)
+	public String getSportsManDetail(@RequestParam Long id, Model model){
+		model.addAttribute("sporstman",sportsManService.findSpecificUser(id));
+		return "otherUserDetails";
+	}
+	//Send Message to user (à mettre sur la page du contact)
+	@RequestMapping(value = "/createMessage{id}", method = RequestMethod.GET)
+	public String getMessageForm(@RequestParam Long id, Model model,Principal principal){
+		MessageForm messageForm = new MessageForm(sportsManService.findCurrentUser(principal.getName()),
+				sportsManService.findSpecificUser(id));
+		model.addAttribute("messageForm", messageForm);
+		return "createMessage";
+	}
+	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
+	public String sendMessage(@Valid MessageForm messageForm, BindingResult bindingResult){
+		sportsManService.sendMessage(messageForm);
+		return "redirect:/user";
+	}
+	//Message Page :potentiellement multiple
+	/*@RequestMapping(value = "/createMessage{id}", method = RequestMethod.GET)
+	public String getMessagePageForm(@RequestParam Long id, Model model,Principal principal){
+		model.addAttribute("messageForm", );
+		return "createMessage";
+	}*/
+
+	//Get Message Page
+	@RequestMapping(value = "/getMessagesSent", method = RequestMethod.GET)
+	public String getAllMessageSent(Model model,Principal principal){
+		model.addAttribute("messages",sportsManService.findMessages(
+				sportsManService.findCurrentUser(principal.getName()), true));
+		String status = "sent";
+		model.addAttribute("status", status);
+		return "getMessages";
+	}
+	@RequestMapping(value = "/getReceivedMessages", method = RequestMethod.GET)
+	public String getAllReceivedMessages(Model model,Principal principal){
+		model.addAttribute("messages",sportsManService.findMessages(
+				sportsManService.findCurrentUser(principal.getName()), false));
+		String status = "received";
+		model.addAttribute("status", status);
+		return "getMessages";
+	}
+	//Get Notification Page
+	/*@RequestMapping(value = "/GetNotifications", method = RequestMethod.GET)
+	public String getMessagePageForm(@RequestParam Long id, Model model,Principal principal){
+		model.addAttribute("messageForm", new MessageForm(sportsManService.findCurrentUser(principal.getName()),
+				sportsManService.findSpecificUser(id)));
+		return "createMessage";
+	}*/
+	//FindContacts
+	@RequestMapping(value = "/contacts", method = RequestMethod.GET)
+	public String getContacts(Model model, Principal principal){
+		model.addAttribute("allUsers",
+				sportsManService.getAllContacts(principal.getName()));
+		return "contacts";
+	}
+	//FindNotContacts
+	@RequestMapping(value = "/findNewUsers", method = RequestMethod.GET)
+	public String getUnknowUsers(Model model, Principal principal){
+		model.addAttribute("allUsers",
+				sportsManService.getPotentialContacts(sportsManService.findCurrentUser(principal.getName())));
+		return "users";
 	}
 
 	@RequestMapping(value = "/getRegisteredEvents{id}", method = RequestMethod.GET)
