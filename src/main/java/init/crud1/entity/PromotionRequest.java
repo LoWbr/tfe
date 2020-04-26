@@ -48,6 +48,6 @@ public class PromotionRequest {
 
     public PromotionRequest(SportsMan candidate, Role inDemand) {
         this.candidate = candidate;
-        this.request = request;
+        this.request = inDemand;
     }
 }

@@ -15,6 +15,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.sql.DataSource;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -35,6 +37,8 @@ class GlobalControllerTest {
     private ManagementService managementService;
     @MockBean
     private NewsService newsService;
+    @MockBean
+    private DataSource dataSource;
 
     @Test
     void getHome() throws Exception {

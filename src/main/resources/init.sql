@@ -73,7 +73,9 @@ INSERT INTO statistic (earned_points,energy_expenditure,activity_id, sports_man_
 INSERT INTO sports_man_contacts (sports_man_id,contacts_id) VALUES
 (2,1),
 (2,3),
-(1,3);
+(1,3),
+(4,1)
+;
 
 INSERT INTO role (name) VALUES
 ('ROLE_SIMPLY'),

@@ -13,6 +13,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.sql.DataSource;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -33,6 +35,8 @@ class ManagementControllerTest {
     private ManagementService managementService;
     @MockBean
     private NewsService newsService;
+    @MockBean
+    private DataSource dataSource;
 
     @Test
     @WithMockUser(roles = {"ADMINISTRATOR"})

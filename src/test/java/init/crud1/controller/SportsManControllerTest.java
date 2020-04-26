@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.sql.DataSource;
 import java.security.Principal;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,8 +41,9 @@ class SportsManControllerTest {
     private ManagementService managementService;
     @MockBean
     private NewsService newsService;
-    /*@MockBean
-    private PasswordEncoder passwordEncoder;*/
+    @MockBean
+    private DataSource dataSource;
+
 
     @Test
     @WithAnonymousUser
