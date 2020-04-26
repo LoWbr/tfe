@@ -37,7 +37,7 @@ public class SportsMan  {
 
     @OneToOne
     @JoinColumn(name="fk_level", referencedColumnName = "id", nullable = false)
-    Level level;
+    private Level level;
 
     private Double weight;
 

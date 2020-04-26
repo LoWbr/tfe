@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -206,6 +208,21 @@ public class ActivityController {
         activityService.participantDropout(activityService.getSpecificActivity(idActivity),
                 sportsManService.findCurrentUser(principal.getName()));
         return "redirect:/events";
+    }
+
+    @RequestMapping(value = "/inviteContactPage{id}", method = RequestMethod.GET)
+    public String inviteContactPage(@RequestParam(value = "id") Long id, Model model, Principal principal) {
+        model.addAttribute("contacts", sportsManService.getAllContacts(principal.getName()));
+        model.addAttribute("activity", activityService.getSpecificActivity(id));
+        return "inviteContactToActivity";
+    }
+
+    @RequestMapping(value = "/inviteUserToActivity{idActivity,idUser}", method = RequestMethod.GET)
+    public String inviteContactPage(@RequestParam(value = "idActivity") Long idActivity,
+                                          @RequestParam(value = "idUser") Long idUser, Model model) {
+        System.out.println(idActivity+ " " + idUser);
+        activityService.inviteContact(activityService.getSpecificActivity(idActivity), sportsManService.findSpecificUser(idUser));
+        return "redirect:/inviteContactPage?id=" + idActivity;
     }
 
     @RequestMapping(value = "/close{id}", method = RequestMethod.GET)

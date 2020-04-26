@@ -195,4 +195,9 @@ public class ActivityService {
     public Activity getActivityByName(String name) {
 		return this.activityRepository.findByName(name);
     }
+
+    public void inviteContact(Activity specificActivity, SportsMan specificUser) {
+		specificActivity.addParticipant(specificUser);
+		this.saveActivity(specificActivity);
+    }
 }
