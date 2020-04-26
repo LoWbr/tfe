@@ -12,7 +12,6 @@ import javax.validation.Valid;
 
 import init.crud1.form.MessageForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -121,8 +120,8 @@ public class SportsManController {
 	//Show User Details
 	@RequestMapping(value = "/sportsMan{id}", method = RequestMethod.GET)
 	public String getSportsManDetail(@RequestParam Long id, Model model){
-		model.addAttribute("sporstman",sportsManService.findSpecificUser(id));
-		return "otherUserDetails";
+		model.addAttribute("sportsMan",sportsManService.findSpecificUser(id));
+		return "externDetails";
 	}
 	//Send Message to user (à mettre sur la page du contact)
 	@RequestMapping(value = "/createMessage{id}", method = RequestMethod.GET)

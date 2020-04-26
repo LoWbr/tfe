@@ -145,7 +145,7 @@ public class ManagementController {
 		return "redirect:/manageLevelsSetting";
 	}
 
-	@RequestMapping(value = "/history", method = RequestMethod.GET)
+	@RequestMapping(value = "/history"/*, method = RequestMethod.GET*/)
 	public String getHistory(@ModelAttribute("searchNewForm") SearchNewForm searchNewForm,
 			Model model, @RequestParam(required = false) Boolean there) {
 		model.addAttribute("allTypes", newsService.getAllNewsType());

@@ -36,13 +36,22 @@
 <div><a th:href="@{/createComment(id=${activity.getId()})}">Add Comment</a></div>
 <div sec:authorize="isAuthenticated()">
     <div th:if="${activity.getOpen()}">
-    <td th:if="${activity.checkPresence(sportsMan)}">
-        <span th:if="${activity.checkLevel(sportsMan)}"><a th:href="@{/postulate(id=${activity.getId()})}">Postulate</a></span>
-        <span th:unless="${activity.checkLevel(sportsMan)}">Too low Level, sorry.</span>
-    </td>
-    <td th:unless="${activity.checkPresence(sportsMan)}">
-        <a>Already try</a>
-    </td>
+
+    <div th:if="${activity.checkPresence(sportsMan)}">
+        <span><a th:href="@{/quit(id=${activity.getId()})}">Leave Event</a></span>
+    </div>
+        <div th:unless="${activity.checkPresence(sportsMan)}">
+
+            <td th:if="${activity.checkApplication(sportsMan)}">
+                <span th:if="${activity.checkLevel(sportsMan)}"><a th:href="@{/postulate(id=${activity.getId()})}">Postulate</a></span>
+                <span th:unless="${activity.checkLevel(sportsMan)}">Too low Level, sorry.</span>
+            </td>
+            <td th:unless="${activity.checkApplication(sportsMan)}">
+                <a>You have already sent a demand : an answer will be arrive very soon</a>
+            </td>
+
+        </div>
+
     </div>
     <div th:unless="${activity.getOpen()}">
         <p>ACTIVITY CANCELLED</p>

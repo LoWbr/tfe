@@ -244,11 +244,18 @@ public class Activity {
             return false;
     }
 
-    public boolean checkPresence(SportsMan sportsMan){
-        if (this.getCandidate().contains(sportsMan) || this.getRegistered().contains(sportsMan))
-            return false;
-        else
+    public boolean checkApplication(SportsMan sportsMan){
+        if (this.getCandidate().contains(sportsMan))
             return true;
+        else
+            return false;
+    }
+
+    public boolean checkPresence(SportsMan sportsMan){
+        if (this.getRegistered().contains(sportsMan))
+            return true;
+        else
+            return false;
     }
 
 }

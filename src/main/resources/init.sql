@@ -37,7 +37,7 @@ INSERT INTO activity (name, fk_activity, fk_creator,duration,open,over,fk_minimu
 ('Brasse Bien Grasse',3,1,90,false,false,2,3,'2020-08-10 14:00:00' ),
 ('Footing Mosan',2,2,60,true,false,1,2,'2020-07-15 09:30:00'),
 ('Vélo en Folie',1,3,180,true,false,1,1,'2020-07-04 08:00:00'),
-('Run & Beer',2,1,45,true,false,3,4,'2020-06-25 17:30:00');
+('Run & Beer',2,1,45,true,false,1,2,'2020-06-25 17:30:00');
 
 INSERT INTO activity_registered(registered_activities_id, registered_id) VALUES
 (1,1),
@@ -52,7 +52,8 @@ INSERT INTO activity_registered(registered_activities_id, registered_id) VALUES
 (4,3),
 (4,4),
 (4,5),
-(4,6);
+(4,6),
+(8,6);
 
 --Statistic
 INSERT INTO statistic (earned_points,energy_expenditure,activity_id, sports_man_id) VALUES
@@ -74,7 +75,7 @@ INSERT INTO sports_man_contacts (sports_man_id,contacts_id) VALUES
 (2,1),
 (2,3),
 (1,3),
-(4,1)
+(5,1)
 ;
 
 INSERT INTO role (name) VALUES

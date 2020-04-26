@@ -10,10 +10,10 @@ import java.util.List;
 public interface NewsRepository extends CrudRepository<News, Long> {
 
     @Query("Select news from News news where (:name is null or news.source.firstName = :name)" +
-            "and (:type is null or news.type = :type)")
+            "and (:type is null or news.type = :type) ")
     List<News> filter(
             @Param("name") String name,
-            @Param("type") NewsType newsType);
+            @Param("type") NewsType newstype);
 
     @Query("Select news from News news where news.target= :user")
     List<News> findByUser(

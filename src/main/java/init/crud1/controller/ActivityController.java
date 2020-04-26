@@ -201,6 +201,13 @@ public class ActivityController {
         return "redirect:/events";
     }
 
+    @RequestMapping(value = "/quit{id}", method = RequestMethod.GET)
+    public String removeUser(@RequestParam(value = "id") Long idActivity, Principal principal) {
+        activityService.participantDropout(activityService.getSpecificActivity(idActivity),
+                sportsManService.findCurrentUser(principal.getName()));
+        return "redirect:/events";
+    }
+
     @RequestMapping(value = "/close{id}", method = RequestMethod.GET)
     public String closeEvent(@RequestParam(value = "id") Long id) {
         activityService.closeActivity(activityService.getSpecificActivity(id));

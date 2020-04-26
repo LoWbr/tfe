@@ -121,6 +121,12 @@ public class ActivityService {
 		this.saveActivity(activity);
 	}
 
+	public void participantDropout(Activity activity, SportsMan sportsMan){
+		activity.removeParticipant(sportsMan);
+		this.saveActivity(activity);
+		this.newsService.returnAbandonmentNew(sportsMan, activity,NewsType.PARTICIPANT_DROPOUT);
+	}
+
 	//Close Activity
 	public void closeActivity(Activity activity) {
 		activity.closeEvent();

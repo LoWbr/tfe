@@ -31,7 +31,7 @@
             <span th:unless="${sporstman.getBlocked()}"><a
                     th:href="@{/user/block(id=${sporstman.getId()})}">Block</a></span>
         </td>
-        <td><a th:href="@{/user(id=${sporstman.getId()})}">Details</a></td>
+        <td><a th:href="@{/sportsMan(id=${sporstman.getId()})}">Details</a></td>
         <td>
             <span th:if="${allCandidates.contains(sporstman)}"><a th:href="@{/promote(id=${sporstman.getId()})}">Promote</a></span>
             <span th:unless="${allCandidates.contains(sporstman.getId())}"></span>

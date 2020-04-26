@@ -124,8 +124,8 @@ public class NewsService {
     }
 
     public void returnRegistrationResultNew(SportsMan sportsMan, Activity activity, NewsType newsType){
-            News answerToBuyer = new News(sportsMan, activity.getCreator(),activity,newsType, false);
-            this.saveNew(answerToBuyer);
+            News answerFromBuyer = new News(sportsMan, activity.getCreator(),activity,newsType, false);
+            this.saveNew(answerFromBuyer);
     }
 
 
@@ -144,5 +144,10 @@ public class NewsService {
             News announceToCreator = new News(sportsman,message.getOriginator(),null,newsType, false);
             this.saveNew(announceToCreator);
         }
+    }
+
+    public void returnAbandonmentNew(SportsMan sportsMan, Activity activity, NewsType newsType) {
+        News answerToBuyer = new News(activity.getCreator(),sportsMan,activity,newsType, false);
+        this.saveNew(answerToBuyer);
     }
 }
