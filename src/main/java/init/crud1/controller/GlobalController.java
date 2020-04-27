@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+
 @Controller
 public class GlobalController {
 
@@ -25,7 +28,13 @@ public class GlobalController {
     }
 
     @RequestMapping(value = "/signIn", method = RequestMethod.GET)
-    public String signIn() {
+    public String signIn(@RequestParam(value = "error", required = false) String error,
+                         Model model) {
+        String warning = null;
+        if(error != null){
+            warning = "Unknown or Blocked Account";
+        }
+        model.addAttribute("warning",warning);
         return "signIn";
     }
 
@@ -56,6 +65,19 @@ public class GlobalController {
             model.addAttribute("searchActivityForm",searchActivityForm );
             return "search";
         }
+    }
+
+    @RequestMapping(value = "/403", method = RequestMethod.GET)
+    public String error(Model model, HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        if (principal != null) {
+            model.addAttribute("msg", "Hi user, you do not have permission to access this page!");
+        } else {
+            model.addAttribute("msg",
+                    "It seems that your are not connected.");
+        }
+
+        return "accessdenied";
     }
 
 }

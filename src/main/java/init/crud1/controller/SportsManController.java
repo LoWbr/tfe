@@ -12,6 +12,7 @@ import javax.validation.Valid;
 
 import init.crud1.form.MessageForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -99,12 +100,21 @@ public class SportsManController {
 
 	@RequestMapping(value = "/updateUser", method = RequestMethod.POST)
 	public String updateSportsMan(@Valid SportsManForm sportsManForm,
-			BindingResult bindingResult, Principal principal) {
+			BindingResult bindingResult, Principal principal, HttpServletRequest request) throws ServletException {
 		if(bindingResult.hasErrors()){
+			System.out.println(bindingResult.getFieldError());
 			return "updateUser";
 		}
 		sportsManService.updateUser(sportsManService.findCurrentUser(principal.getName()), sportsManForm);
+		this.logoutLogin(request,sportsManService.findCurrentUser(sportsManForm.getMail()).getEmail(),
+				sportsManService.findCurrentUser(sportsManForm.getMail()).getPassword());
 		return "users";
+	}
+
+	public void logoutLogin(HttpServletRequest request, String username, String password) throws ServletException {
+		SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
+		securityContextLogoutHandler.logout(request, null, null);
+		request.login(username, password); // Change password also!! To get the valid character chain!!
 	}
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)

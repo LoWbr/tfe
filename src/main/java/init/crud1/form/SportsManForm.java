@@ -125,7 +125,8 @@ public class SportsManForm {
 		this.weight = sportsMan.getWeight();
 		this.dateofBirth = sportsMan.getDateOfBirth().toString();
 		this.password = sportsMan.getPassword();
+		this.confirmPassword = sportsMan.getPassword();
 	}
 
-	;
+
 }

@@ -13,6 +13,8 @@
     <fieldset>
         <legend>Sign in to the Website</legend>
     <div class="pure-control-group">
+        <span th:if="${warning != null}" th:text="${warning}"></span>
+
         <label>Mail</label>
         <input type="email" class="form-control" name="username"
                placeholder="Email"/> <span
