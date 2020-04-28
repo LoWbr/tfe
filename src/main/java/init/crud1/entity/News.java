@@ -27,6 +27,9 @@ public class News{
     @Enumerated(EnumType.STRING)
     private NewsType type;
 
+    @Column(length = 120)
+    private String content;
+
     private boolean seen;
 
     public Long getId() {
@@ -59,6 +62,22 @@ public class News{
 
     public void setType(NewsType type) {
         this.type = type;
+    }
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public boolean isSeen() {
