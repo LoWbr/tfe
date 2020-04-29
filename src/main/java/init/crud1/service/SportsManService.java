@@ -1,5 +1,6 @@
 package init.crud1.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import init.crud1.entity.*;
@@ -192,5 +193,18 @@ public class SportsManService {
 
     public List<News> getNotifications(SportsMan currentUser) {
 		return this.newsService.getByUser(currentUser);
+    }
+
+    public List<SportsMan> getAllNotMarked(Activity specificActivity) {
+		List<SportsMan> toTreat = new ArrayList<>();
+		//All for the event
+		List<SportsMan> registered = specificActivity.getRegistered();
+		//All who do not have statistic for this event
+		for (SportsMan sportsMan: registered) {
+			if(this.statisticRepository.findForActivityAndSportsMan(specificActivity, sportsMan).size() == 0){
+				toTreat.add(sportsMan);
+			}
+		}
+		return toTreat;
     }
 }

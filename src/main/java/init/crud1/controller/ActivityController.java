@@ -2,6 +2,7 @@ package init.crud1.controller;
 
 import init.crud1.entity.*;
 import init.crud1.form.ActivityForm;
+import init.crud1.form.NotationForm;
 import init.crud1.repository.*;
 import init.crud1.service.ActivityService;
 import init.crud1.service.SportsManService;
@@ -226,8 +227,17 @@ public class ActivityController {
     }
 
     @RequestMapping(value = "/close{id}", method = RequestMethod.GET)
-    public String closeEvent(@RequestParam(value = "id") Long id) {
-        activityService.closeActivity(activityService.getSpecificActivity(id));
-        return "redirect:/events";
+    public String closeEvent(@RequestParam(value = "id") Long id, Model model) {
+        //check cotations => if stat avec id event pour chaque participant, close event.
+        if(activityService.checkAllCotationsForRegistered(activityService.getSpecificActivity(id))){
+            activityService.closeActivity(activityService.getSpecificActivity(id));
+            return "redirect:/events";
+        }
+        //Sinon, redirection sur la page de check avec les personnes à noter
+        else{
+            model.addAttribute("peopleToMark", sportsManService.getAllNotMarked(activityService.getSpecificActivity(id)));
+            model.addAttribute("notationForm", new NotationForm());
+            return "setCotationForEvent";
+        }
     }
 }

@@ -63,7 +63,7 @@ public class WebSecuConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().accessDeniedPage("/403")
                 .and()
                 .formLogin()
-                .loginPage("/403")//Par défaut, redirection pour toute opération nécessitant une connexion
+                .loginPage("/signIn")//Par défaut, redirection pour toute opération nécessitant une connexion
                 .defaultSuccessUrl("/")
                 .failureUrl("/signIn?error=true")
                 .permitAll()

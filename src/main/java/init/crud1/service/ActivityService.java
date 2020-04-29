@@ -200,4 +200,13 @@ public class ActivityService {
 		specificActivity.addParticipant(specificUser);
 		this.saveActivity(specificActivity);
     }
+
+	public boolean checkAllCotationsForRegistered(Activity specificActivity) {
+		if(specificActivity.getRegistered().size() == this.statisticRepository.findByActivity(specificActivity).size()){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 }

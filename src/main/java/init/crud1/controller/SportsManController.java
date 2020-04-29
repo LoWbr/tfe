@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import init.crud1.form.MessageForm;
+import init.crud1.form.NotationForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -217,6 +218,12 @@ public class SportsManController {
 	@RequestMapping(value = "/applyAsConfirmedUser", method = RequestMethod.GET)
 	public String applyAsConfirmedUser(Principal principal) {
 		sportsManService.applyForConfirmedRole(sportsManService.findCurrentUser(principal.getName()));
+		return "redirect:/user";
+	}
+
+	@RequestMapping(value = "/noteUser{id}", method = RequestMethod.POST)
+	public String noteUser(@RequestParam Long id, NotationForm notationForm){
+		System.out.println(sportsManService.findSpecificUser(id).getFirstName() + ": " + notationForm.getNotation());
 		return "redirect:/user";
 	}
 

@@ -53,7 +53,8 @@ INSERT INTO activity_registered(registered_activities_id, registered_id) VALUES
 (4,4),
 (4,5),
 (4,6),
-(8,6);
+(8,6),
+(8,2);
 
 --Statistic
 INSERT INTO statistic (earned_points,energy_expenditure,activity_id, sports_man_id) VALUES
