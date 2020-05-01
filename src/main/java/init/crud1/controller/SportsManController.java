@@ -221,10 +221,12 @@ public class SportsManController {
 		return "redirect:/user";
 	}
 
-	@RequestMapping(value = "/noteUser{id}", method = RequestMethod.POST)
-	public String noteUser(@RequestParam Long id, NotationForm notationForm){
-		System.out.println(sportsManService.findSpecificUser(id).getFirstName() + ": " + notationForm.getNotation());
-		return "redirect:/user";
+	@RequestMapping(value = "/noteUser{idActivity,idUser}", method = RequestMethod.POST)
+	public String noteUser(@RequestParam(value = "idActivity") Long idActivity,
+						   @RequestParam(value = "idUser") Long idUser, NotationForm notationForm){
+		this.sportsManService.setResultForEventToParticipant(activityService.getSpecificActivity(idActivity),
+				sportsManService.findSpecificUser(idUser), notationForm.getNotation());
+		return "redirect:/ownEvent?id=" + idActivity;
 	}
 
 }

@@ -236,6 +236,7 @@ public class ActivityController {
         //Sinon, redirection sur la page de check avec les personnes à noter
         else{
             model.addAttribute("peopleToMark", sportsManService.getAllNotMarked(activityService.getSpecificActivity(id)));
+            model.addAttribute("id",id);
             model.addAttribute("notationForm", new NotationForm());
             return "setCotationForEvent";
         }

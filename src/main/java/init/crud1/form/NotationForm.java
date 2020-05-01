@@ -4,13 +4,13 @@ import init.crud1.entity.SportsMan;
 
 public class NotationForm {
 
-    private Byte notation;
+    private double notation;
 
-    public Byte getNotation() {
+    public double getNotation() {
         return notation;
     }
 
-    public void setNotation(Byte notation) {
+    public void setNotation(double notation) {
         this.notation = notation;
     }
 }

@@ -131,7 +131,7 @@ public class ActivityService {
 	public void closeActivity(Activity activity) {
 		activity.closeEvent();
 		newsService.returnCancelledApplictionNewOrCloseEventNew(activity,NewsType.DONE_EVENT);
-		for (SportsMan sportsman : activity.getRegistered()) {
+		/*for (SportsMan sportsman : activity.getRegistered()) {
 			double durationInHours = (double) activity.getDuration() / 60;
 			Integer energeticExpenditure = Math.toIntExact(Math.round(sportsman.getWeight() * durationInHours * activity.getActivity().getMet()));
 			sportsman.setPoints(energeticExpenditure);
@@ -144,7 +144,7 @@ public class ActivityService {
 			sportsManService.saveUser(sportsman);
 			Statistic statistic = new Statistic(sportsman, activity, energeticExpenditure);
 			sportsManService.saveStatistic(statistic);
-		}
+		}*/
 		this.saveActivity(activity);
 	}
 

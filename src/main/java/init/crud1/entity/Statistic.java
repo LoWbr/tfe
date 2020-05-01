@@ -57,10 +57,10 @@ public class Statistic {
     public Statistic() {
     }
 
-    public Statistic(SportsMan sportsMan, Activity activity, Integer energyExpenditure) {
+    public Statistic(SportsMan sportsMan, Activity activity, Integer earnedPoints, Integer energyExpenditure) {
         this.sportsMan = sportsMan;
         this.activity = activity;
-        this.earnedPoints = energyExpenditure / 10;
+        this.earnedPoints = earnedPoints;
         this.energyExpenditure = energyExpenditure;
     }
 }

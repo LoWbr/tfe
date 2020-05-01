@@ -207,4 +207,33 @@ public class SportsManService {
 		}
 		return toTreat;
     }
+
+	public void setResultForEventToParticipant(Activity activity, SportsMan sportsMan, double notation) {
+		if (notation != 0) {
+			double durationInHours = (double) activity.getDuration() / 60;
+			//Calcul de la dépense énergétique
+			Integer energeticExpenditure = Math.toIntExact(Math.round(sportsMan.getWeight() * durationInHours * activity.getActivity().getMet()));
+			//Calcul des points acquis : base du ratio du niveau utilisateur, et de la cotation
+			Integer earnedPoints = Math.toIntExact((long) (energeticExpenditure * sportsMan.getLevel().getRatioPoints() * notation));
+			sportsMan.setPoints(earnedPoints);
+			if (sportsMan.checkLevelStatus()){// Récursivité pour les niveaux suivant à mettre en place!!
+				newsService.returnApplicationResultNewOrLevelUpNew(sportsMan,NewsType.LEVEL_UP);
+				Byte new_place = sportsMan.getLevel().getPlace();
+				new_place++;
+				sportsMan.setLevel(this.findSpecificLevel(Long.valueOf(new_place)));
+			}
+			this.saveUser(sportsMan);
+			Statistic statistic = new Statistic(sportsMan, activity, earnedPoints, energeticExpenditure);
+			this.saveStatistic(statistic);
+			//NEWS à mettre en place pour clôture cotation
+		}
+		else{
+			Integer energeticExpenditure = 0;
+			Integer earnedPoints = 0;
+			Statistic statistic = new Statistic(sportsMan, activity, earnedPoints, energeticExpenditure);
+			this.saveStatistic(statistic);
+			//NEWS à mettre en place pour clôture cotation
+		}
+
+	}
 }
