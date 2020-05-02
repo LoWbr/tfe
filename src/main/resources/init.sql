@@ -20,7 +20,7 @@ INSERT INTO level (name, place, maximum_threshold, ratio_points) VALUES
 INSERT INTO sports_man (first_name,last_name,description,date_of_birth,weight,points,email,password, fk_level,blocked) VALUES
 ('Laurent','Weber','Chevelu Sportif','1990-05-29',79,35,'lo@gmail.com','$2y$10$e/M4T66Ioz3rZ0fltX7qpeLzonDbP/sD60zehJ77t0SoJUCF.WGMa',1,false),
 ('Michael','Atlas','Photograhe en tout genre','1988-04-01',90,32,'mike@gmail.com','$2y$10$0w8iBx3F0.9N9x5eGgy73eqhkDRcKXGnoZQyqvFZ9KC0XEeyHRi0K',1,false),
-('Geoffrey','Moyens','Militaire et Patate Mariée','1983-02-02',95,40,'geof@gmail.com','$2y$10$4g0uGcj7IjljDWoCY5e8X.T2GbVP2e/RPs65.MbUvYECccKlJiQqW',1,false),
+('Geoffrey','Moyens','Militaire et Patate Mariée','1983-02-02',95,40,'geof@gmail.com','$2y$10$4g0uGcj7IjljDWoCY5e8X.T2GbVP2e/RPs65.MbUvYECccKlJiQqW',1,true),
 ('Romain','Monsterlet','Animateur et Flûtiste','1990-12-06',83,84,'ro@gmail.com','$2y$10$FbazGLhM/vvjhS8ykF5neu58q9cdQB02b1DVVdPfHY47S6zoAw3US',1,false),
 ('Baptiste','Marck','Orval et Web','1990-10-29',70,43,'ba@gmail.com','$2y$10$NbmUdZTlCUZxXtWCmMxhjOCEbEXa1aASSMueCoQYcfNmjxtPhU8m6',1,false),
 ('Troy','Devrieze','Crêtu Blondinet','1990-07-29',65,36,'troy@gmail.com','$2y$10$.Xp0.U7Xym8UzPNIKTO/Ted7AZckkHRMWJ4tybWEgZVRXD.5WGkm2',1,false);

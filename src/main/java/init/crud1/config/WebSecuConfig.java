@@ -4,14 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -21,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.util.Base64;
 
 @Configuration
 @EnableWebSecurity
@@ -39,10 +44,23 @@ public class WebSecuConfig extends WebSecurityConfigurerAdapter {
         return bCryptPasswordEncoder;
     }
 
-    @Autowired
+    /*@Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+    }*/
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authprovider());
+    }
+
+    public AuthenticationProvider authprovider(){
+        DaoAuthenticationProvider impl = new DaoAuthenticationProvider();
+        impl.setUserDetailsService(customUserDetailsService);
+        impl.setPasswordEncoder(passwordEncoder());
+        impl.setHideUserNotFoundExceptions(false);
+        return impl;
     }
 
     @Override
@@ -65,7 +83,8 @@ public class WebSecuConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/signIn")//Par défaut, redirection pour toute opération nécessitant une connexion
                 .defaultSuccessUrl("/")
-                .failureUrl("/signIn?error=true")
+                /*.failureUrl("/signIn?error=true")*/
+                .failureHandler(new MyAuthenticationFailureHandler())
                 .permitAll()
                 .and()
                 .logout()
@@ -84,11 +103,13 @@ public class WebSecuConfig extends WebSecurityConfigurerAdapter {
         ;
     }
 
-    private class MyAccessDeniedHandler implements AccessDeniedHandler {
+    private class MyAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
         @Override
-        public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-
+        public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+            String exceptionMessage = exception.getMessage();
+            String encodedMsg = Base64.getUrlEncoder().encodeToString(exceptionMessage.getBytes());
+            response.sendRedirect("/signIn?error=" + encodedMsg);
         }
     }
 

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.Base64;
 
 @Controller
 public class GlobalController {
@@ -32,7 +33,8 @@ public class GlobalController {
                          Model model) {
         String warning = null;
         if(error != null){
-            warning = "Unknown or Blocked Account";
+            byte[] getErrorBytes = Base64.getDecoder().decode(error);
+            warning = new String(getErrorBytes);
         }
         model.addAttribute("warning",warning);
         return "signIn";

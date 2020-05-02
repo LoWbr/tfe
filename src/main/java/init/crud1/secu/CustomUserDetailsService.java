@@ -2,6 +2,7 @@ package init.crud1.secu;
 
 import init.crud1.entity.SportsMan;
 import init.crud1.repository.SportsManRepository;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -25,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         SportsMan sportsMan = sportsManRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("Email " + userName + " not found"));
         if(sportsMan.getBlocked()){
-            return null;// Trouver une exception!!!
+            throw new UsernameNotFoundException(userName + " was blocked.");
         }else {
             return new org.springframework.security.core.userdetails.User(sportsMan.getEmail(), sportsMan.getPassword(),
                     getAuthorities(sportsMan));
