@@ -1,9 +1,6 @@
 package init.crud1.controller;
 
-import init.crud1.entity.Activity;
-import init.crud1.entity.Level;
 import init.crud1.form.SearchActivityForm;
-import init.crud1.form.SportsManForm;
 import init.crud1.service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +22,7 @@ public class GlobalController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getHome() {
-        return "home";
+        return "global/home";
     }
 
     @RequestMapping(value = "/signIn", method = RequestMethod.GET)

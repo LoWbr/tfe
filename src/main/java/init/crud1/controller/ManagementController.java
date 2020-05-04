@@ -1,8 +1,18 @@
 package init.crud1.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
 import java.security.Principal;
+import java.time.LocalDateTime;
 
+import init.crud1.config.GetMediaType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,6 +32,8 @@ import init.crud1.service.ManagementService;
 import init.crud1.service.NewsService;
 import init.crud1.service.SportsManService;
 
+import javax.servlet.ServletContext;
+
 @Controller
 public class ManagementController {
 
@@ -29,14 +41,16 @@ public class ManagementController {
 	private SportsManService sportsManService;
 	private ManagementService managementService;
 	private NewsService newsService;
+	private ServletContext servletContext;
 
 	@Autowired
 	public ManagementController(ActivityService activityService, SportsManService sportsManService,
-			ManagementService managementService, NewsService newsService) {
+			ManagementService managementService, NewsService newsService, ServletContext servletContext) {
 		this.activityService = activityService;
 		this.sportsManService = sportsManService;
 		this.managementService = managementService;
 		this.newsService = newsService;
+		this.servletContext = servletContext;
 	}
 
 	@RequestMapping(value="/manageUsers", method = RequestMethod.GET)
@@ -159,6 +173,24 @@ public class ManagementController {
 			model.addAttribute("searchActivityForm",searchNewForm);
 			return "searchNew";
 		}
+	}
+
+	@RequestMapping(value = "/backUpDB", method = RequestMethod.GET)
+	public ResponseEntity<InputStreamResource> makeDBBackUp() throws FileNotFoundException {
+
+		this.managementService.getDBStatus();
+		String folderPath = "/home/laurent/ultimateProjects/phase3/tfe_repo";
+		String filename = "Daily_DB_Backup.sql";
+		MediaType mediaType = GetMediaType.getForFileName(this.servletContext, filename);
+		//Get the file
+		File file = new File(folderPath + "/" + filename);
+		InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+		file.delete();
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachement;filename=" + file.getName())
+				.contentType(mediaType)
+				.contentLength(file.length())
+				.body(resource);
 	}
 
 }
