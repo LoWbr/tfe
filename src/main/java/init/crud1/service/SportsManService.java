@@ -140,6 +140,7 @@ public class SportsManService {
 
 	public void updateUser(SportsMan sportsMan, SportsManForm sportsManForm){
 		sportsMan.updateSportsMan(sportsManForm);
+		sportsMan.setPassword(passwordEncoder.encode(sportsManForm.getPassword()));
 		this.saveUser(sportsMan);
 	}
 

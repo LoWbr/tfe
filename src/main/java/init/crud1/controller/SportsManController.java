@@ -106,16 +106,36 @@ public class SportsManController {
 			System.out.println(bindingResult.getFieldError());
 			return "updateUser";
 		}
-		sportsManService.updateUser(sportsManService.findCurrentUser(principal.getName()), sportsManForm);
-		this.logoutLogin(request,sportsManService.findCurrentUser(sportsManForm.getMail()).getEmail(),
-				sportsManService.findCurrentUser(sportsManForm.getMail()).getPassword());
-		return "users";
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate dateInput = LocalDate.parse(sportsManForm.getDateofBirth(),formatter).plusDays(1);
+		LocalDate current = LocalDate.now();
+
+		if(this.sportsManService.findCurrentUser(sportsManForm.getMail()) != null &&
+				(this.sportsManService.findCurrentUser(principal.getName())).equals(sportsManForm.getMail())) {
+			bindingResult.rejectValue("mail", "", "This account already exists");
+			return "updateUser";
+		}
+		else if(Period.between(dateInput,current).getYears() < 18){
+			System.out.println(Period.between(dateInput,current).getYears());
+			bindingResult.rejectValue("dateofBirth","","You must have 18 years old to register");
+			return "updateUser";
+		}
+		else if(!(sportsManForm.getPassword()).equals(sportsManForm.getConfirmPassword())){
+			bindingResult.rejectValue("password","","The two passwords do not match.");
+			return "updateUser";
+		}
+		else {
+			sportsManService.updateUser(sportsManService.findCurrentUser(principal.getName()), sportsManForm);
+			this.logout(request, sportsManService.findCurrentUser(sportsManForm.getMail()).getEmail(),
+					sportsManService.findCurrentUser(sportsManForm.getMail()).getPassword());
+			this.authWithHttpServletRequest(request,sportsManForm.getMail(), sportsManForm.getPassword());
+			return "users";
+		}
 	}
 
-	public void logoutLogin(HttpServletRequest request, String username, String password) throws ServletException {
+	public void logout(HttpServletRequest request, String username, String password) throws ServletException {
 		SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
 		securityContextLogoutHandler.logout(request, null, null);
-		request.login(username, password); // Change password also!! To get the valid character chain!!
 	}
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)

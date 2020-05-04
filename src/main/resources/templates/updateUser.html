@@ -60,11 +60,19 @@
                             <span class="text-danger" th:errors="*{description}"> </span>
                         </div>
                     </div>
-                    <div class="pure-u-1-1">
-                        <input type="hidden" th:field="*{password}">
+                    <div class="pure-u-1-2">
+                        <label th:for="${sportsManForm}">Password</label>
+                        <input class="pure-u-23-24" type="password" th:field="*{password}"/>
+                        <div>
+                            <span class="text-danger" th:errors="*{password}"> </span>
+                        </div>
                     </div>
-                    <div class="pure-u-1-1">
-                        <input type="hidden" th:field="*{confirmPassword}">
+                    <div class="pure-u-1-2">
+                        <label th:for="${sportsManForm}">Confirm Password</label>
+                        <input class="pure-u-24-24" type="password" th:field="*{confirmPassword}"/>
+                        <div>
+                            <span class="text-danger" th:errors="*{confirmPassword}"> </span>
+                        </div>
                     </div>
                     <div class="pure-u-1-1">
                         <button class="pure-button pure-button" type="submit">Save</button>
