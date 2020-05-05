@@ -47,23 +47,25 @@ public class GlobalController {
         return "about";
     }
 
-    @RequestMapping("/search")
+    @RequestMapping(value ="/search", method = RequestMethod.GET)
     public String search(@ModelAttribute("searchActivityForm") SearchActivityForm searchActivityForm,
-                         Model model, @RequestParam(required = false) Boolean there) {
+                         Model model) {
         model.addAttribute("allLevels", activityService.getAllLevels());
         model.addAttribute("allKinds", activityService.getAllActivityTypes());
-        //if requestparam flag
-        if(there != null){
-            model.addAttribute("allEvents",activityService.findForSearch(searchActivityForm));
-            model.addAttribute("searchActivityForm",searchActivityForm );
-            return "search";
-        }
-        //else
-        else{
-            model.addAttribute("allEvents",activityService.getAllActivities());
-            model.addAttribute("searchActivityForm",searchActivityForm );
-            return "search";
-        }
+        model.addAttribute("allEvents",activityService.getAllActivities());
+        model.addAttribute("searchActivityForm",searchActivityForm );
+        return "search";
+    }
+
+    @RequestMapping(value ="/searchByFilter", method = RequestMethod.POST)
+    public String searchByFilter(@ModelAttribute("searchActivityForm") SearchActivityForm searchActivityForm,
+                         Model model) {
+        model.addAttribute("allLevels", activityService.getAllLevels());
+        model.addAttribute("allKinds", activityService.getAllActivityTypes());
+        model.addAttribute("allEvents", activityService.findForSearch(searchActivityForm));
+        model.addAttribute("searchActivityForm", searchActivityForm);
+        return "search";
+
     }
 
     @RequestMapping(value = "/403", method = RequestMethod.GET)

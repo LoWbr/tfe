@@ -8,7 +8,7 @@
 <body>
 <th:block th:include="/navbar"></th:block>
 <a th:href="@{/history}">Clear the Search</a>
-<form th:action="@{/history(there=true)}"
+<form th:action="@{/historyByFilter}"
       th:object="${searchNewForm}" method="POST" class="pure-form pure-form-stacked">
     <div class="pure-g">
         <div class="pure-u-1-4">
@@ -22,8 +22,14 @@
             </select>
         </div>
         <div class="pure-u-1-4">
-            <label>Name Target</label>
-            <input class="pure-u-23-24" type="text" th:field="*{nameSportsman}"/>
+            <label>Source Name</label>
+            <select class="pure-u-23-24" th:field="*{nameSportsman}">
+                <option value="" selected> Choose User</option>
+                <option th:each="user : ${allUsers}"
+                        th:value="${user.getFirstName()}"
+                        th:utext="${user.getFirstName()}">
+                </option>
+            </select>
         </div>
         <div class="pure-u-1-1">
             <button class="pure-button pure-button" type="submit">Save</button>
@@ -41,7 +47,13 @@
     <tbody>
     <tr th:each="act : ${allActs}">
         <td><span th:text="${act.getType()}"></span></td>
-        <td><span th:text="${act.getSource().getFirstName()}"></span></td>
+        <td th:if="${act.getSource() == null}">
+            <span>Null</span>
+        </td>
+        <td th:unless="${act.getSource() == null}">
+            <span th:text="${act.getSource().getFirstName()}"></span>
+        </td>
+          <!--<td><span th:text="${act.getSource().getFirstName()}"></span></td>-->
         <td><span th:text="${act.getTarget().getFirstName()}"></span></td>
     </tr>
     </tbody>

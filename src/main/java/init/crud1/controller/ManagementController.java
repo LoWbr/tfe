@@ -159,20 +159,26 @@ public class ManagementController {
 		return "redirect:/manageLevelsSetting";
 	}
 
-	@RequestMapping(value = "/history"/*, method = RequestMethod.GET*/)
+	@RequestMapping(value = "/history", method = RequestMethod.GET)
 	public String getHistory(@ModelAttribute("searchNewForm") SearchNewForm searchNewForm,
 			Model model, @RequestParam(required = false) Boolean there) {
 		model.addAttribute("allTypes", newsService.getAllNewsType());
-		if(there != null){ ;
-		model.addAttribute("allActs",newsService.findForSearch(searchNewForm));
-		model.addAttribute("searchActivityForm",searchNewForm);
-		return "searchNew";
-		}
-		else{
+		model.addAttribute("allUsers", sportsManService.getAllUser());
+
 			model.addAttribute("allActs",newsService.findAll());
 			model.addAttribute("searchActivityForm",searchNewForm);
 			return "searchNew";
-		}
+
+	}
+
+	@RequestMapping(value = "/historyByFilter", method = RequestMethod.POST)
+	public String getHistoryByFilter(@ModelAttribute("searchNewForm") SearchNewForm searchNewForm,
+							 Model model, @RequestParam(required = false) Boolean there) {
+		model.addAttribute("allTypes", newsService.getAllNewsType());
+		model.addAttribute("allUsers", sportsManService.getAllUser());
+			model.addAttribute("allActs",newsService.findForSearch(searchNewForm));
+			model.addAttribute("searchActivityForm",searchNewForm);
+			return "searchNew";
 	}
 
 	@RequestMapping(value = "/backUpDB", method = RequestMethod.GET)
